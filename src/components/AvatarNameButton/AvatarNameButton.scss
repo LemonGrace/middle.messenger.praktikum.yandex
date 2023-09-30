@@ -1,0 +1,20 @@
+@import 'src/styles/fonts';
+
+.avatar-name-button {
+	display: flex;
+	align-items: center;
+	justify-content: flex-start;
+	flex-grow: 1;
+	flex-shrink: 1;
+	gap: 8px;
+
+	//TODO добавить вариант с длинным именем
+	&__name {
+		color: #FFF9BB;
+		text-shadow: 4px 4px 4px #DB006E;
+		@include medium;
+		font-size: 28px;
+		line-height: 30px;
+		text-decoration-line: underline;
+	}
+}

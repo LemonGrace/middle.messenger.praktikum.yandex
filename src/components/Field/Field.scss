@@ -1,0 +1,27 @@
+@import 'src/styles/fonts';
+
+.field {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	gap: 2px;
+
+	&__label {
+		color: #FFF9BB;
+		@include medium;
+		font-size: 14px;
+		line-height: 16px;
+	}
+
+	&__input {
+		border-radius: 8px;
+		border: 1px solid #C27E8C;
+		background: #FFF;
+		padding: 8px;
+		color: rgba(43, 23, 30, 0.50);
+		@include medium;
+		font-size: 14px;
+		line-height: 16px;
+		width: 100%;
+	}
+}

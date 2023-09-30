@@ -1,0 +1,13 @@
+@import 'src/styles/fonts';
+@import 'src/styles/general';
+@import 'src/pages/Profile/Profile';
+
+.edit-profile {
+	&__wrapper {
+		@include Wrapper(24px, 600px);
+	}
+
+	&__submit {
+		margin-top: 32px;
+	}
+}

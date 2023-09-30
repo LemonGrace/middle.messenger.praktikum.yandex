@@ -1,0 +1,30 @@
+@mixin avatarSize($containerSize) {
+	.avatar {
+		&-background {
+			width: $containerSize;
+			height: $containerSize;
+		}
+
+		width: $containerSize * 0.8;
+		height: $containerSize * 0.8;
+	}
+}
+
+.avatar {
+	&-background {
+		border-radius: 50%;
+		background: radial-gradient(50% 50% at 50% 50%, #2B171E 81.56%, #DB006E 100%);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+
+	border-radius: 50%;
+	object-fit: cover;
+}
+
+@include avatarSize(50px);
+
+[data-size='120'] {
+	@include avatarSize(120px);
+}

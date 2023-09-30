@@ -1,0 +1,31 @@
+html, body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+.layout {
+	display: flex;
+
+	&__wrapper {
+		width: 100%;
+		height: 100%;
+	}
+
+	&-center {
+		align-items: center;
+		justify-content: center;
+	}
+
+	&-flex-start {
+		align-items: flex-start;
+		justify-content: center;
+	}
+
+	background: linear-gradient(288deg, #470225 0%, #45072E 15.94%, #170D41 39.9%, #061433 72.71%, #000 100%);
+}
