@@ -1,15 +1,16 @@
 @import 'src/styles/fonts';
+@import 'src/styles/colors';
 
 .button {
 	padding: 8px 32px;
 	width: fit-content;
 	border-radius: 10px;
-	border: 2px solid #D01F4B;
-	background: #F0BCC6;
+	border: 2px solid $baseMaroon;
+	background: $baseCameoPink;
 	box-shadow: 2px 4px 4px 0 rgba(208, 31, 75, 0.68);
-	color: #D01F4B;
+	color: $baseMaroon;
 	text-align: center;
-	text-shadow: 2px 4px 4px #D66984;
+	text-shadow: 2px 4px 4px $baseCinnamonSatin;
 	font-size: 24px;
 	line-height: 24px;
 	@include medium;
@@ -49,11 +50,11 @@
 		height: 44px;
 		width: 55px;
 		//TODO найти иконку с простым путем, чтобы можно было накладывать фильтр
-		border-color: rgba(252, 224, 162, 0.80);
+		border-color: $baseYellow;
 	}
 
 	&[data-type="new_chat"] {
-		border-color: #DB006E;
+		border-color: $baseRedPurple;
 		@include IconColor(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%));
 	}
 

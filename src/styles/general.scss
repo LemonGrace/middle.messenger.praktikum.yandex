@@ -1,3 +1,5 @@
+@import 'src/styles/colors';
+
 html, body {
 	margin: 0;
 	width: 100%;
@@ -27,5 +29,5 @@ html, body {
 		justify-content: center;
 	}
 
-	background: linear-gradient(288deg, #470225 0%, #45072E 15.94%, #170D41 39.9%, #061433 72.71%, #000 100%);
+	background: linear-gradient(288deg, $baseDarkScarlet 0%, $baseDarkChocolate 15.94%, $baseCetaceanBlue 39.9%, $baseMaastrichtBlue 72.71%, $baseBlack 100%);
 }

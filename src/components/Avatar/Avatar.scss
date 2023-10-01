@@ -1,3 +1,5 @@
+@import 'src/styles/colors';
+
 @mixin avatarSize($containerSize) {
 	.avatar {
 		&-background {
@@ -13,7 +15,7 @@
 .avatar {
 	&-background {
 		border-radius: 50%;
-		background: radial-gradient(50% 50% at 50% 50%, #2B171E 81.56%, #DB006E 100%);
+		background: radial-gradient(50% 50% at 50% 50%, $baseRaisinBlack 81.56%, $baseRedPurple 100%);
 		display: flex;
 		align-items: center;
 		justify-content: center;

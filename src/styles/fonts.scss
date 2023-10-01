@@ -1,3 +1,5 @@
+@import './colors';
+
 $CormorantGaramond: Cormorant Garamond;
 
 @mixin regular {
@@ -16,7 +18,7 @@ $CormorantGaramond: Cormorant Garamond;
 }
 
 @mixin link {
-	color: #FFF9BB;
+	color: $baseYellow;
 	text-align: center;
 	@include medium;
 	font-size: 24px;

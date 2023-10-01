@@ -17,15 +17,17 @@ export default `
                 <h2 style='color: white'>
                     Для тестирования в первом спринте ссылке на все сверстанные макеты
                 </h2>
-                <div>
-                    {{>Link url='/' text='Вход'}} <br>
-                    {{>Link url='/registration' text='Регистрация'}} <br>
-                    {{>Link url='/main' text='Лента сообщений'}} <br>
-                    {{>Link url='/profile' text='Профиль пользователя'}}<br>
-                    {{>Link url='/profile-edit' text='Профиль пользователя редактируемый'}}<br>
-                    {{>Link url='/not-found' text='Страница 404'}}<br>
-                    {{>Link url='/error' text='Страницы 5**'}}<br>
-                </div>
+                <nav>
+                    <ul>
+                        <li>{{>Link url='/' text='Вход'}} <br></li>
+                        <li>{{>Link url='/registration' text='Регистрация'}} <br></li>
+                        <li>{{>Link url='/main' text='Лента сообщений'}} <br></li>
+                        <li>{{>Link url='/profile' text='Профиль пользователя'}}<br></li>
+                        <li>{{>Link url='/profile-edit' text='Профиль пользователя редактируемый'}}<br></li>
+                        <li>{{>Link url='/not-found' text='Страница 404'}}<br></li>
+                        <li>{{>Link url='/error' text='Страницы 5**'}}<br></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </main>

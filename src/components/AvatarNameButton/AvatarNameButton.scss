@@ -1,4 +1,5 @@
 @import 'src/styles/fonts';
+@import 'src/styles/colors';
 
 .avatar-name-button {
 	display: flex;
@@ -10,8 +11,8 @@
 
 	//TODO добавить вариант с длинным именем
 	&__name {
-		color: #FFF9BB;
-		text-shadow: 4px 4px 4px #DB006E;
+		color: $baseYellow;
+		text-shadow: 4px 4px 4px $baseRedPurple;
 		@include medium;
 		font-size: 28px;
 		line-height: 30px;
