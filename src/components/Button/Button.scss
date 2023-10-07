@@ -1,0 +1,66 @@
+@import 'src/styles/fonts';
+@import 'src/styles/colors';
+
+.button {
+	padding: 8px 32px;
+	width: fit-content;
+	border-radius: 10px;
+	border: 2px solid $baseMaroon;
+	background: $baseCameoPink;
+	box-shadow: 2px 4px 4px 0 rgba(208, 31, 75, 0.68);
+	color: $baseMaroon;
+	text-align: center;
+	text-shadow: 2px 4px 4px $baseCinnamonSatin;
+	font-size: 24px;
+	line-height: 24px;
+	@include medium;
+	display: block;
+	cursor: pointer;
+
+	//TODO анимация
+	&:active {
+		opacity: 0.5;
+	}
+}
+
+@mixin IconColor($filterColor) {
+	.button-icon__img {
+		filter: $filterColor;
+	}
+}
+
+.button-icon {
+	cursor: pointer;
+	height: 32px;
+	width: 44px;
+	padding: 4px 10px;
+	border-radius: 10px;
+	border: 2px solid;
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&__img {
+		width: 24px;
+		height: 24px;
+	}
+
+	&[data-type="edit"] {
+		height: 44px;
+		width: 55px;
+		//TODO найти иконку с простым путем, чтобы можно было накладывать фильтр
+		border-color: $baseYellow;
+	}
+
+	&[data-type="new_chat"] {
+		border-color: $baseRedPurple;
+		@include IconColor(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%));
+	}
+
+	//TODO анимация
+	&:active {
+		opacity: 0.5;
+	}
+
+}

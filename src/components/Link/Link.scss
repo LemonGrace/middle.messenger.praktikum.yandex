@@ -1,0 +1,6 @@
+@import 'src/styles/fonts';
+
+.link {
+	@include link;
+	cursor: pointer;
+}

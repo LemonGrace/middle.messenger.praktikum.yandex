@@ -1,0 +1,33 @@
+@import 'src/styles/colors';
+
+html, body {
+	margin: 0;
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
+}
+
+*, *:before, *:after {
+	box-sizing: inherit;
+}
+
+.layout {
+	display: flex;
+
+	&__wrapper {
+		width: 100%;
+		height: 100%;
+	}
+
+	&-center {
+		align-items: center;
+		justify-content: center;
+	}
+
+	&-flex-start {
+		align-items: flex-start;
+		justify-content: center;
+	}
+
+	background: linear-gradient(288deg, $baseDarkScarlet 0%, $baseDarkChocolate 15.94%, $baseCetaceanBlue 39.9%, $baseMaastrichtBlue 72.71%, $baseBlack 100%);
+}

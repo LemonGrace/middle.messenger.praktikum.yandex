@@ -1,0 +1,29 @@
+@import './colors';
+
+$CormorantGaramond: Cormorant Garamond;
+
+@mixin regular {
+	font-family: $CormorantGaramond;
+	font-weight: 400;
+}
+
+@mixin medium {
+	font-family: $CormorantGaramond;
+	font-weight: 500;
+}
+
+@mixin bold {
+	font-family: $CormorantGaramond;
+	font-weight: 700;
+}
+
+@mixin link {
+	color: $baseYellow;
+	text-align: center;
+	@include medium;
+	font-size: 24px;
+	line-height: 24px;
+	text-decoration-line: underline;
+}
+
+//TODO посмотреть, как можно стандартизировать размеры текста
