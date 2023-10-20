@@ -1,7 +1,7 @@
 @import 'src/styles/fonts';
 @import 'src/styles/general';
 
-@mixin Wrapper($gap, $maxWidth) {
+@mixin wrapper($gap, $maxWidth) {
 	display: flex;
 	align-items: center;
 	flex-direction: column;
@@ -12,19 +12,14 @@
 
 .profile {
 	&__wrapper {
-		display: flex;
-		align-items: center;
-		flex-direction: column;
-		gap: 32px;
-		max-width: 510px;
-		width: 100%;
-		@include Wrapper(32px, 510px);
+		@include wrapper(32px, 510px);
 	}
 
 	&__buttons {
 		width: 100%;
 		display: flex;
 		justify-content: space-between;
+		align-items: center;
 		margin-top: 20px;
 	}
 }

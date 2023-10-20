@@ -1,10 +1,18 @@
 import './Avatar.scss';
 
-// language=hbs
-export default `
-    <div data-size={{ size }}>
-        <div class='avatar-background'>
-            <img src='{{ generateImgUrl userImg }}' alt='Avatar' class='avatar'>
-        </div>
-    </div>
-`;
+import template from './template';
+
+import { Block } from '../../templateUtils/Block';
+import { IAvatarProps } from './Avatar.interface';
+import { GenerateImgUrl } from '../../utils/GenerateImgUrl';
+
+export class Avatar extends Block<IAvatarProps> {
+	constructor(props: IAvatarProps) {
+		props.userImg = GenerateImgUrl(props.userImg);
+		super(props, 'Avatar');
+	}
+
+	render() {
+		return template;
+	}
+}

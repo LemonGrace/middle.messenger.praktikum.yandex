@@ -1,29 +1,80 @@
 @import './colors';
 
-$CormorantGaramond: Cormorant Garamond;
+$cormorant-garamond: cormorant garamond;
 
 @mixin regular {
-	font-family: $CormorantGaramond;
+	font-family: $cormorant-garamond;
 	font-weight: 400;
 }
 
 @mixin medium {
-	font-family: $CormorantGaramond;
+	font-family: $cormorant-garamond;
 	font-weight: 500;
 }
 
 @mixin bold {
-	font-family: $CormorantGaramond;
+	font-family: $cormorant-garamond;
 	font-weight: 700;
 }
 
-@mixin link {
-	color: $baseYellow;
-	text-align: center;
-	@include medium;
-	font-size: 24px;
-	line-height: 24px;
-	text-decoration-line: underline;
+$fs14: 14px;
+$fs16: 16px;
+$fs18: 18px;
+$fs24: 24px;
+$fs40: 40px;
+$lh14: 14px;
+$lh16: 16px;
+$lh18: 18px;
+$lh20: 20px;
+$lh24: 24px;
+$lh42: 42px;
+
+
+@mixin text-params($fontSize, $lineHeight) {
+	font-size: $fontSize;
+	line-height: $lineHeight;
 }
 
-//TODO посмотреть, как можно стандартизировать размеры текста
+@mixin fs18-lh18-medium {
+	@include text-params($fs18, $lh18);
+	@include medium;
+}
+
+@mixin fs18-lh20-medium {
+	@include text-params($fs18, $lh20);
+	@include medium;
+}
+
+@mixin fs16-lh16-medium {
+	@include text-params($fs16, $lh16);
+	@include medium;
+}
+
+@mixin fs18-lh18-bold {
+	@include text-params($fs18, $lh18);
+	@include bold;
+}
+
+@mixin fs24-lh24-medium {
+	@include text-params($fs24, $lh24);
+	@include medium;
+}
+
+@mixin fs40-lh42-bold {
+	@include text-params($fs40, $lh42);
+	@include bold;
+}
+
+@mixin fs14-lh14-regular {
+	@include text-params($fs14, $lh14);
+	@include regular;
+}
+
+@mixin link {
+	color: $base-pale-yellow;
+
+	@include fs24-lh24-medium;
+
+	text-decoration-line: underline;
+	cursor: pointer;
+}

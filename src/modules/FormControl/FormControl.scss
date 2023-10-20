@@ -1,0 +1,47 @@
+@import 'src/styles/fonts';
+@import 'src/styles/colors';
+
+.form-control {
+	display: flex;
+	align-items: flex-start;
+	flex-direction: column;
+	gap: 2px;
+	width: 100%;
+
+	&__label {
+		color: $base-cameo-pink;
+
+		@include fs18-lh20-medium;
+	}
+
+	&__input {
+		border-radius: 8px;
+		border: 1px solid $base-old-rose;
+		background: $base-white;
+		padding: 8px;
+		color: $base-dark-chocolate;
+
+		@include fs18-lh18-medium;
+
+		width: 100%;
+
+		&::placeholder {
+			color: rgb(43 23 30 / 50%);
+		}
+
+		&:focus, &:active {
+			outline: none;
+			border: 2px solid $base-lavender-pink;
+		}
+
+		&-error {
+			border: 2px solid $base-red-purple;
+
+			&__text {
+				color: $base-red-purple;
+
+				@include fs16-lh16-medium;
+			}
+		}
+	}
+}

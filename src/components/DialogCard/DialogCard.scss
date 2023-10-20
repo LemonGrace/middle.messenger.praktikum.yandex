@@ -1,0 +1,74 @@
+@import 'src/styles/fonts';
+@import 'src/styles/colors';
+
+.dialog-card {
+	width: 100%;
+	padding: 8px;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	border-radius: 12px;
+	opacity: 0.8;
+	background: $base-cameo-pink;
+	box-shadow: 4px 8px 4px 0 rgb(43 23 30 / 18%);
+	cursor: pointer;
+
+	&-selected {
+		opacity: 1;
+		border-radius: 12px;
+		border: 2px solid $base-red-purple;
+		background: $base-classic-rose;
+		box-shadow: -2px -2px 4px 0 rgb(219 0 110 / 58%), 2px 2px 4px 0 rgb(219 0 110 / 58%);
+	}
+
+	&__user {
+		flex-grow: 1;
+		flex-shrink: 1;
+
+		&__name {
+			color: $base-raisin-black;
+
+			@include fs18-lh18-medium;
+
+			margin-bottom: 8px;
+		}
+
+		&__message {
+			opacity: 0.8;
+		}
+	}
+
+	&__info {
+		display: flex;
+		flex-shrink: 0;
+		flex-grow: 0;
+		height: 100%;
+		flex-direction: column;
+		align-items: center;
+		justify-content: flex-end;
+		gap: 8px;
+
+		// TODO доработка динамичного круга
+		&__count {
+			border-radius: 50%;
+			width: 25px;
+			height: 25px;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			background-color: $base-pale-yellow;
+			flex-shrink: 0;
+			flex-grow: 0;
+		}
+	}
+
+	// TODO overflow
+	&__text {
+		display: block;
+
+		@include fs16-lh16-medium;
+
+		color: $base-raisin-black;
+	}
+}

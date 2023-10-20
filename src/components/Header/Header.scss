@@ -2,12 +2,12 @@
 @import 'src/styles/colors';
 
 .header {
-	color: $baseLavenderPink;
+	color: $base-lavender-pink;
 	text-align: center;
-	text-shadow: 6px 8px 4px rgba(219, 0, 110, 0.50), 0 0 8px rgba(219, 0, 110, 0.50), 0 0 16px rgba(219, 0, 110, 0.50), -4px -8px 8px rgba(219, 0, 110, 0.50);
-	@include bold;
-	font-size: 40px;
-	line-height: 42px;
+	text-shadow: 6px 8px 4px rgb(219 0 110 / 50%), 0 0 8px rgb(219 0 110 / 50%), 0 0 16px rgb(219 0 110 / 50%), -4px -8px 8px rgb(219 0 110 / 50%);
+
+	@include fs40-lh42-bold;
+
 	margin: 0;
 	width: fit-content;
 }

@@ -1,0 +1,18 @@
+@import 'src/styles/fonts';
+@import 'src/styles/colors';
+
+.alert {
+	&__container {
+		border: 2px solid $base-classic-rose;
+		background: $base-magenta;
+		box-shadow: 4px 4px 6px 4px $base-red-purple, -4px -4px 6px 4px $base-red-purple;
+		padding: 16px;
+	}
+
+	&__text {
+		@include fs24-lh24-medium;
+
+		color: $base-pale-yellow;
+		text-align: center;
+	}
+}

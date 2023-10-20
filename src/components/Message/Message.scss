@@ -1,0 +1,77 @@
+@import 'src/styles/colors';
+@import 'src/styles/fonts';
+
+// TODO scrollbar
+.message {
+	&__wrapper {
+		width: 100%;
+		display: flex;
+		justify-content: flex-end;
+
+		&.outer {
+			justify-content: flex-start;
+		}
+	}
+
+	&__container {
+		display: flex;
+		flex-direction: row;
+		align-items: flex-end;
+		justify-content: flex-end;
+		height: fit-content;
+		gap: 14px;
+
+		&.outer {
+			flex-direction: row-reverse;
+		}
+	}
+
+	position: relative;
+	min-height: 50px;
+	width: 90%;
+	border-radius: 12px;
+	border-bottom: 2px solid $base-red-purple;
+	border-left: 2px solid $base-red-purple;
+	border-right: none;
+	background: $base-cameo-pink;
+	padding: 8px 12px;
+
+	&.outer {
+		border-right: 2px solid $base-bluebonnet;
+		border-left: none;
+		border-bottom: 2px solid $base-bluebonnet;
+		background: $base-waterspout;
+	}
+
+	&__triangle {
+		position: absolute;
+		bottom: 12px;
+		right: -12px;
+		width: 0;
+		height: 0;
+		border-style: solid;
+		border-width: 8px 0 8px 14px;
+		border-color: transparent transparent transparent $base-cameo-pink;
+
+		&.outer {
+			left: -12px;
+			border-width: 8px 14px 8px 0;
+			border-color: transparent $base-waterspout transparent transparent;
+		}
+	}
+
+	&__text {
+		color: $base-black;
+
+		@include fs18-lh18-medium;
+	}
+
+	&__time {
+		color: $base-raisin-black;
+
+		@include fs14-lh14-regular;
+
+		margin-top: 8px;
+		text-align: right;
+	}
+}
