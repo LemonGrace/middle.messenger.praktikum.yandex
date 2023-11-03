@@ -7,8 +7,14 @@ html, body {
 	box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*, *::before, *::after {
 	box-sizing: inherit;
+	margin: 0;
+	padding: 0;
+}
+
+li {
+	list-style-type: none;
 }
 
 .layout {
@@ -24,10 +30,14 @@ html, body {
 		justify-content: center;
 	}
 
+	&-space-between {
+		justify-content: space-between;
+	}
+
 	&-flex-start {
 		align-items: flex-start;
 		justify-content: center;
 	}
 
-	background: linear-gradient(288deg, $baseDarkScarlet 0%, $baseDarkChocolate 15.94%, $baseCetaceanBlue 39.9%, $baseMaastrichtBlue 72.71%, $baseBlack 100%);
+	background: linear-gradient(288deg, $base-dark-scarlet 0%, $base-dark-chocolate 15.94%, $base-cetacean-blue 39.9%, $base-maastricht-blue 72.71%, $base-black 100%);
 }

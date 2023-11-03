@@ -1,4 +1,5 @@
-import { EDIT_PROFILE_FIELDS } from '../pages/EditProfile/EditProfile.fields';
+import { IEditProfileProps } from '../pages/EditProfile/EditProfile.interface';
+import { IProfileProps } from '../pages/Profile/Profile.interface';
 
 export const USER_DATA = [
 	{
@@ -27,13 +28,12 @@ export const USER_DATA = [
 	},
 ];
 
-export const UserMockProfile = {
+export const UserMockProfile: IProfileProps = {
 	username: 'Вероника',
 	userImg: 'defaultAvatar.jpg',
 	infoData: USER_DATA,
 };
 
-export const UserEditMockProfile = {
+export const UserEditMockProfile: IEditProfileProps = {
 	userImg: 'defaultAvatar.jpg',
-	fields: EDIT_PROFILE_FIELDS,
 };

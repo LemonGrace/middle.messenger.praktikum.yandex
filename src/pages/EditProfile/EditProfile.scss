@@ -4,7 +4,7 @@
 
 .edit-profile {
 	&__wrapper {
-		@include Wrapper(24px, 600px);
+		@include wrapper(24px, 600px);
 	}
 
 	&__submit {

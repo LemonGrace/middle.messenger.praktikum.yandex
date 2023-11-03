@@ -1,8 +1,14 @@
 import './Header.scss';
+import { Block } from '../../templateUtils/Block';
+import template from './template';
+import { IHeaderProps } from './Header.interface';
 
-// language=hbs
-export default `
-    <h1 class='header'>
-        {{ title }}
-    </h1>
-`;
+export class Header extends Block<IHeaderProps> {
+	constructor(props: IHeaderProps) {
+		super(props, 'Header');
+	}
+
+	render() {
+		return template;
+	}
+}

@@ -1,0 +1,83 @@
+@import 'src/styles/fonts';
+@import 'src/styles/colors';
+
+.button {
+	padding: 8px 32px;
+	width: fit-content;
+	border-radius: 10px;
+	border: 2px solid $base-maroon;
+	background: $base-cameo-pink;
+	box-shadow: 2px 4px 4px 0 rgb(208 31 75 / 68%);
+	color: $base-maroon;
+	text-align: center;
+	font-size: 24px;
+	line-height: 24px;
+
+	@include medium;
+
+	display: block;
+	cursor: pointer;
+	text-transform: uppercase;
+
+	// TODO анимация
+	// TODO hover
+	&:active {
+		opacity: 0.5;
+	}
+}
+
+@mixin icon-color($filterColor, $borderColor) {
+	border-color: $borderColor;
+
+	.button-icon__img {
+		filter: $filterColor;
+	}
+}
+
+.button-icon {
+	cursor: pointer;
+	height: 32px;
+	width: 44px;
+	padding: 4px 10px;
+	border-radius: 10px;
+	border: 2px solid;
+	background: transparent;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&__img {
+		width: 24px;
+		height: 24px;
+	}
+
+	&[data-type="edit"] {
+		@include icon-color(invert(85%) sepia(29%) saturate(350%) hue-rotate(356deg) brightness(109%) contrast(103%), $base-pale-yellow);
+	}
+
+	&[data-type="chat_settings"] {
+		@include icon-color(invert(85%) sepia(29%) saturate(350%) hue-rotate(356deg) brightness(109%) contrast(103%), $base-pale-yellow);
+	}
+
+	&[data-type="new_chat"] {
+		// TODO поискать иконку
+		@include icon-color(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%), $base-red-purple);
+	}
+
+	&[data-type="attachment"] {
+		@include icon-color(invert(57%) sepia(28%) saturate(518%) hue-rotate(298deg) brightness(93%) contrast(88%), $base-old-rose);
+	}
+
+	&[data-type="send"] {
+		// TODO поискать иконку
+		@include icon-color(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%), $base-red-purple);
+
+		background-color: $base-classic-rose;
+	}
+
+	// TODO анимация
+	&:active {
+		opacity: 0.5;
+	}
+
+}

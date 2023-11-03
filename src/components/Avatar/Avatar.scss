@@ -1,6 +1,6 @@
 @import 'src/styles/colors';
 
-@mixin avatarSize($containerSize) {
+@mixin avatar-size($containerSize) {
 	.avatar {
 		&-background {
 			width: $containerSize;
@@ -15,7 +15,7 @@
 .avatar {
 	&-background {
 		border-radius: 50%;
-		background: radial-gradient(50% 50% at 50% 50%, $baseRaisinBlack 81.56%, $baseRedPurple 100%);
+		background: radial-gradient(50% 50% at 50% 50%, $base-raisin-black 81.56%, $base-red-purple 100%);
 		display: flex;
 		align-items: center;
 		justify-content: center;
@@ -25,8 +25,8 @@
 	object-fit: cover;
 }
 
-@include avatarSize(50px);
+@include avatar-size(50px);
 
 [data-size='120'] {
-	@include avatarSize(120px);
+	@include avatar-size(120px);
 }

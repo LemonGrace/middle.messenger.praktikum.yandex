@@ -15,6 +15,7 @@ app.get('*', (req, res) => {
 	res.sendFile(path.join(__dirname, '/dist/index.html'));
 });
 
-app.listen(PORT, function() {
+app.listen(PORT, function listen() {
+	// eslint-disable-next-line no-console
 	console.log(`Example app listening on port ${PORT}!`);
 });
