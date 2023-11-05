@@ -12,7 +12,10 @@ export default `
 		</div>
         <div class='chat__menu'>
             {{{ AvatarNameButton }}}
-            {{{ IconButtonSettings }}}
+            <div class='chat__menu-buttons'>
+                {{{ IconButtonSettings }}}
+                {{{ IconButtonDelete }}}
+            </div>
         </div>
         <div class='chat__input'>
             {{{ IconButtonAttach }}}

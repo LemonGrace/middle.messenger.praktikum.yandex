@@ -17,6 +17,17 @@ li {
 	list-style-type: none;
 }
 
+dialog {
+	margin: auto;
+	border: none;
+	background: transparent;
+
+	&::backdrop {
+		background: $base-dark-scarlet;
+		opacity: 0.4;
+	}
+}
+
 .layout {
 	display: flex;
 

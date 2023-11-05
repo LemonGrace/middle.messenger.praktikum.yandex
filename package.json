@@ -8,14 +8,16 @@
 		"start": "tsc && vite build --emptyOutDir && node server.js",
 		"build": "tsc && vite build --emptyOutDir",
 		"preview": "vite preview",
-		"test": "eslint . --ext ts --fix && npx stylelint \"**/*.scss\""
+		"test stylelint": "npx stylelint \"**/*.scss\"",
+		"test ts-check": "npx tsc",
+		"test": "eslint . --ext ts --fix && npm run test stylelint"
 	},
 	"devDependencies": {
 		"@types/express": "^4.17.17",
 		"@types/uuid": "^9.0.5",
-		"@typescript-eslint/eslint-plugin": "^6.7.4",
-		"@typescript-eslint/parser": "^6.7.4",
-		"eslint": "^8.51.0",
+		"@typescript-eslint/eslint-plugin": "^5.0.0",
+		"@typescript-eslint/parser": "^5.0.0",
+		"eslint": "^8.1.0",
 		"eslint-config-airbnb-base": "^15.0.0",
 		"sass": "^1.68.0",
 		"stylelint": "^15.10.3",

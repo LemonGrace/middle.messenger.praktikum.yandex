@@ -30,3 +30,7 @@
 [data-size='120'] {
 	@include avatar-size(120px);
 }
+
+[data-size='40'] {
+	@include avatar-size(40px);
+}

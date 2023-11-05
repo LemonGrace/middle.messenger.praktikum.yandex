@@ -1,5 +1,5 @@
 import './Form.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IFormProps } from './Form.interface';
 import template from './template';
 import { MaybeArray, NeedArray } from '../../utils/NeedArray';
@@ -10,8 +10,8 @@ export class Form extends Block<IFormProps> {
 		super(props, 'Form');
 	}
 
-	protected init() {
-		super.init();
+	protected async init() {
+		await super.init();
 		this.children = {
 			Controls: this.props.fields,
 		};
@@ -30,18 +30,20 @@ export class Form extends Block<IFormProps> {
 		return this.children.Controls as FormControl[];
 	}
 
+	public Validate(): void {
+		this.Controls.forEach(control => control.Validate());
+	}
+
 	public get IsValid(): boolean {
 		return this.Controls.every(control => control.IsValid);
 	}
 
-	public SubmitForm(): void {
+	public SubmitForm(): { [key: string]: any } {
 		const data: { [key: string]: any } = {};
 		for (const control of this.Controls) {
-			control.Validate();
 			data[control.FormControlName as keyof typeof data] = control.Value;
 		}
-		// eslint-disable-next-line no-console
-		console.log(['submit', data]);
+		return data;
 	}
 
 	render() {

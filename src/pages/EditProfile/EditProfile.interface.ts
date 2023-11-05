@@ -1,4 +1,3 @@
-import { Props } from '../../templateUtils/Block.interface';
 import { IInputProps } from '../../components/FormContolElements/Input/Input.interface';
 import {
 	emailValidator,
@@ -8,15 +7,20 @@ import {
 	phoneValidator,
 	Validator,
 } from '../../utils/validator';
-
-export interface IEditProfileProps extends Props {
-	userImg: string,
-}
+import { IUserPasswordData, IUserProfileData } from '../../service/User/User.interface';
 
 export const EDIT_PROFILE_FIELDS: Array<{
 	inputProps: IInputProps,
 	validators: Validator | Validator[],
 }> = [
+	{
+		inputProps: {
+			type: 'file',
+			label: 'Сменить аватар',
+			name: 'avatar',
+		},
+		validators: [],
+	},
 	{
 		inputProps: {
 			label: 'Почта',
@@ -84,3 +88,7 @@ export const EDIT_PROFILE_FIELDS: Array<{
 		validators: passwordValidator,
 	},
 ];
+
+export type IEditProfileFormData = IUserProfileData & IUserPasswordData & {
+	avatar: File,
+};

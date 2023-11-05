@@ -9,9 +9,9 @@ export default `
                 </div>
                 {{{ FormControl }}}
             </div>
-            <div>
+            <div class='messages__list__wrapper'>
                 {{#if chats }}
-                    <ul class='messages__list__wrapper'>
+                    <ul class='messages__list__container'>
                         {{#each DialogCards }}
                             <li>
                                 {{{ this }}}

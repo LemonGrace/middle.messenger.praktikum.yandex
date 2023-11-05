@@ -1,20 +1,24 @@
 import './EditProfile.scss';
-import { Page } from '../../templateUtils/Page';
+import { Page } from '../../core/Page/Page';
 import { Form } from '../../modules/Form/Form';
 import { Header } from '../../components/Header/Header';
 import { FormControl } from '../../modules/FormControl/FormControl';
 import template from './template';
-import { Avatar } from '../../components/Avatar/Avatar';
-import { EDIT_PROFILE_FIELDS, IEditProfileProps } from './EditProfile.interface';
+import { EDIT_PROFILE_FIELDS, IEditProfileFormData } from './EditProfile.interface';
 import { Button } from '../../components/Buttons/Button/Button';
+import store, { IState } from '../../core/Store/Store';
+import UserController from '../../controller/UserController';
+import { IUserProfileData } from '../../service/User/User.interface';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
+import withStorePage from '../../core/Store/WithStorePage';
+import { IsEqual } from '../../utils/IsEqual';
+import { ImageFormControl } from '../../modules/FormControl/ImageFormControl/ImageFormControl';
+import Router from '../../controller/Router/Router';
+import { Block } from '../../core/Block/Block';
 
-export class EditProfile extends Page<IEditProfileProps> {
-	protected init() {
-		super.init();
-
-		const form = new Form({
-			fields: this.createFields(),
-		});
+export class EditProfileBase extends Page {
+	protected async init() {
+		await super.init();
 
 		this.children = {
 			Header: [
@@ -22,18 +26,24 @@ export class EditProfile extends Page<IEditProfileProps> {
 					title: 'Редактирование данных',
 				}),
 			],
-			Avatar: [
-				new Avatar({
-					userImg: this.props.userImg,
-					size: 120,
+			Form: [
+				new Form({
+					fields: this.createFields(),
 				}),
 			],
-			Form: [form],
 			Button: [
 				new Button({
 					text: 'Сохранить',
 					events: {
-						click: () => form.SubmitForm(),
+						click: () => this.onSubmit(),
+					},
+				}),
+				new Button({
+					text: 'Вернуться к профилю',
+					events: {
+						click: async () => {
+							await Router.Go(ROUTE.profile);
+						},
 					},
 				}),
 			],
@@ -42,11 +52,65 @@ export class EditProfile extends Page<IEditProfileProps> {
 
 	protected createFields(): FormControl[] {
 		return EDIT_PROFILE_FIELDS.map(field => {
+			if (field.inputProps.type === 'file') {
+				return new ImageFormControl(field.inputProps);
+			}
 			return new FormControl(field.inputProps).AddValidators(field.validators);
 		});
 	}
+
+	protected onSubmit = async () => {
+		const form = this.children.Form[0] as Form;
+		const userData = store.GetUser();
+		form.Validate();
+		const formData: IEditProfileFormData = form.SubmitForm() as IEditProfileFormData;
+		const {
+			first_name: firstName,
+			second_name: secondName,
+			display_name: displayName,
+			login: userLogin,
+			email: userEmail,
+			phone: userPhone,
+			newPassword,
+			oldPassword,
+			avatar,
+		} = formData;
+		const mainData: IUserProfileData = {
+			first_name: firstName || userData?.first_name || '',
+			second_name: secondName || userData?.second_name || '',
+			display_name: displayName || userData?.display_name || '',
+			login: userLogin || userData?.login || '',
+			email: userEmail || userData?.email || '',
+			phone: userPhone || userData?.phone || '',
+		};
+		if (!IsEqual(userData, {
+			...mainData,
+			id: userData?.id,
+			avatar: userData?.avatar,
+		})) {
+			await UserController.UpdateUserProfile(mainData);
+		}
+		if (newPassword && oldPassword) {
+			await UserController.UpdateUserPassword({
+				newPassword,
+				oldPassword,
+			});
+		}
+		if (avatar) {
+			await UserController.UpdateUserAvatar(formData.avatar);
+		}
+		await Router.Go(ROUTE.profile);
+	};
 
 	render() {
 		return template;
 	}
 }
+
+// TODO loading
+const mapStateToProps = (state: IState) => ({
+	user: state.user,
+	// loading: state.loading,
+});
+
+export const EditProfile = withStorePage(EditProfileBase as typeof Block, mapStateToProps);

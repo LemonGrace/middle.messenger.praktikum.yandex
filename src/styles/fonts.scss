@@ -71,6 +71,8 @@ $lh42: 42px;
 }
 
 @mixin link {
+	border: none;
+	background-color: transparent;
 	color: $base-pale-yellow;
 
 	@include fs24-lh24-medium;

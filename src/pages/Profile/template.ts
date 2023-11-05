@@ -6,7 +6,10 @@ export default `
 		{{{ UserInfo }}}
         <div class='profile__buttons'>
             {{{ IconButton }}}
-            {{{ Button }}}
+            {{{ ButtonLogout }}}
+        </div>
+        <div>
+            {{{ ButtonBack }}}
         </div>
     </div>
 `;

@@ -43,5 +43,47 @@
 				@include fs16-lh16-medium;
 			}
 		}
+
+		&-file {
+			border: none;
+			background: transparent;
+			padding: 0;
+
+			&::-webkit-file-upload-button {
+				visibility: hidden;
+			}
+
+			&:focus, &:active {
+				outline: none;
+				border: none;
+			}
+
+			&::before {
+				content: 'Выберите изображение';
+				display: inline-block;
+				width: 100%;
+				background: $base-lavender-pink;
+				border: 2px solid $base-red-purple;
+				border-radius: 8px;
+				padding: 8px;
+				outline: none;
+				white-space: nowrap;
+				user-select: none;
+				cursor: pointer;
+				text-transform: uppercase;
+				letter-spacing: 5px;
+				text-align: center;
+
+				@include fs18-lh18-medium;
+
+				color: $base-white;
+			}
+
+			&-active {
+				&::before {
+					border-color: $base-waterspout;
+				}
+			}
+		}
 	}
 }

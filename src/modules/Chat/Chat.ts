@@ -1,32 +1,54 @@
 import './Chat.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import template from './template';
 import { IChatProps } from './Chat.interface';
 import { AvatarNameButton } from '../../components/AvatarNameButton/AvatarNameButton';
 import { IconButton } from '../../components/Buttons/IconButton/IconButton';
 import { BUTTON_TYPE } from '../../components/Buttons/IconButton/IconButton.interface';
-import { Message } from '../../components/Message/Message';
-import { IMessageResponse } from '../../pages/Chats/Chats.interface';
 import { FormControl } from '../FormControl/FormControl';
-import { messageValidator } from '../../utils/validator';
+import { requiredValidator } from '../../utils/validator';
+import store, { IState } from '../../core/Store/Store';
+import { Modal } from '../../components/Modal/Modal';
+import { MODAL_TYPE } from '../../components/Modal/Modal.interface';
+import { ImageFormControl } from '../FormControl/ImageFormControl/ImageFormControl';
+import messageController from '../../controller/ModalController';
+import ChatsController from '../../controller/ChatsController';
+import { IAvatarNameButtonProps } from '../../components/AvatarNameButton/AvatarNameButton.interface';
+import withStorePage from '../../core/Store/WithStorePage';
+import { IChat, IChatMessage, IChatUser } from '../../service/Chats/Chats.interface';
+import { UserSettings } from '../UsersSettings/UserSettings';
+import Socket from '../../service/WebSocket';
+import { Message } from '../../components/Message/Message';
+import { BeautifyDate } from '../../utils/BeautifyDate';
 
-export class Chat extends Block<IChatProps> {
-	constructor(props: IChatProps) {
-		super(props, 'Chat');
-	}
-	protected init() {
-		super.init();
+export class ChatBase extends Block {
+	protected users: IChatUser[] = [];
+	protected token = '';
+	protected socket: Socket | null = null;
+	protected deleteChatModal = new Modal({
+		title: 'Удаление чата',
+		text: 'Вы действительно хотите удалить чат?',
+		type: MODAL_TYPE.CONFIRMATION,
+	});
+	protected settingsModal: Modal | null = null;
+
+	protected async init() {
+		const chat = this.SelectedChat;
+		if (!chat) {
+			return;
+		}
+		await super.init();
+		this.users = await ChatsController.GetChatUsers({
+			chatId: chat.id,
+		});
 		this.children = {
 			AvatarNameButton: [
 				new AvatarNameButton({
-					userImg: this.props.userImg,
-					username: this.props.username,
+					avatar: chat.avatar || '',
+					name: chat.title || '',
 					isCustomClick: true,
 					events: {
-						click: () => {
-							// eslint-disable-next-line no-console
-							console.log('перейти в настройки или изменить название чата');
-						},
+						click: () => this.OpenSettings(),
 					},
 				}),
 			],
@@ -34,10 +56,15 @@ export class Chat extends Block<IChatProps> {
 				new IconButton({
 					type: BUTTON_TYPE.chat_settings,
 					events: {
-						click: () => {
-							// eslint-disable-next-line no-console
-							console.log('открыть модалку');
-						},
+						click: () => this.OpenSettings(),
+					},
+				}),
+			],
+			IconButtonDelete: [
+				new IconButton({
+					type: BUTTON_TYPE.delete,
+					events: {
+						click: () => this.DeleteChat(),
 					},
 				}),
 			],
@@ -56,9 +83,8 @@ export class Chat extends Block<IChatProps> {
 				new IconButton({
 					type: BUTTON_TYPE.send,
 					events: {
-						click: () => {
-							// eslint-disable-next-line no-console
-							console.log('открыть модалку');
+						click: async () => {
+							await this.sendMessage();
 						},
 					},
 				}),
@@ -68,32 +94,157 @@ export class Chat extends Block<IChatProps> {
 					name: 'message',
 					placeholder: 'Введите сообщение',
 					type: 'text',
-				}).AddValidators(messageValidator),
+				}).AddValidators(requiredValidator),
 			],
+			Messages: [],
 		};
-		this.initMessage(this.props.messageList);
+		this.settingsModal = new Modal({
+			title: 'Управление чатом',
+			type: MODAL_TYPE.FORM,
+			useTopPosition: true,
+			content: [
+				new ImageFormControl({
+					type: 'file',
+					name: 'avatar',
+				}),
+				new UserSettings({
+					users: this.users,
+					chatId: chat.id || 0,
+				}),
+			],
+		});
+
+		const token = await ChatsController.GetChatToken({
+			chatId: chat.id,
+		});
+		if (token) {
+			this.token = token;
+			await this.OpenSocket();
+		}
 	}
 
-	protected initMessage(messageList: IMessageResponse[]): void {
-		this.children.Messages = messageList.map(message => {
-			return new Message({
-				id: message.messageID,
-				text: message.text,
-				username: this.props.username,
-				isOuterMessage: message.isOuterMessage,
-				time: message.time,
-				userImg: message.isOuterMessage ? this.props.userImg : this.props.selfUserImage,
-			});
+	protected async OpenSocket(): Promise<void> {
+		this.socket = new Socket({
+			chatID: this.SelectedChat?.id || 0,
+			token: this.token,
 		});
 	}
 
+	protected async sendMessage(): Promise<void> {
+		const messageControl = (<FormControl> this.children.FormControl[0]);
+		const message = messageControl.Value;
+		if (message) {
+			this.socket?.SendMessage(message);
+			messageControl.Value = null;
+		}
+	}
+
+	protected renderMessage(messageList: ReadonlyArray<IChatMessage>): void {
+		const user = store.GetUser();
+		this.children.Messages = messageList.map(message => {
+			const isOuterMessage = message.user_id !== user?.id;
+			const chatUser = this.users.find(user => user?.id === message.user_id);
+			return new Message({
+				...message,
+				time: BeautifyDate(message.time, true),
+				isOuterMessage: isOuterMessage,
+				user_avatar: chatUser?.avatar || '',
+			});
+		});
+		this.DispatchComponentDidUpdate();
+	}
+
+	protected get SelectedChat(): IChat | null {
+		return store.GetSelectedChat();
+	}
+
 	protected render(): string {
+		if (!this.SelectedChat) {
+			return '';
+		}
 		return template;
 	}
 
+	protected async OpenSettings(): Promise<void> {
+		if (!this.settingsModal) {
+			return;
+		}
+		const chatId = this.SelectedChat?.id || 0;
+		const isSuccess = <boolean> await messageController.ShowModal(this.settingsModal);
+		if (!isSuccess) {
+			return;
+		}
+		const modalContent = this.settingsModal.Content;
+		const imageControl = <ImageFormControl> modalContent?.[0];
+		if (imageControl.Value) {
+			await ChatsController.UpdateChatAvatar({
+				chatId:	this.SelectedChat?.id || 0,
+				avatar: imageControl.Value,
+			});
+			imageControl.Value = null;
+		}
+
+		const userSettings = (<UserSettings> modalContent?.[1]);
+		const newUsers = userSettings.NewUsers;
+		if (newUsers.length) {
+			userSettings.Clean();
+			const isSuccess = await ChatsController.AddChatUsers({
+				users: newUsers,
+				chatId,
+			});
+			if (isSuccess) {
+				const usersData = await ChatsController.GetChatUsers({
+					chatId,
+				});
+				this.users = usersData;
+				(<UserSettings> modalContent?.[1]).UpdateProps({
+					users: usersData,
+				});
+			}
+		}
+	}
+
+	protected async DeleteChat(): Promise<void> {
+		const isSuccess = <boolean> await messageController.ShowModal(this.deleteChatModal);
+		if (!isSuccess) {
+			return;
+		}
+		await ChatsController.DeleteChat({
+			chatId: this.SelectedChat?.id || 0,
+		});
+
+		if (!this.SelectedChat) {
+			this.DispatchComponentWillUnMount();
+		}
+	}
+
+	public async UpdateInit(): Promise<void> {
+		await this.init();
+		this.DispatchComponentDidUpdate();
+	}
+
 	public UpdateProps(newProps: IChatProps): void {
-		this.initMessage(newProps.messageList);
-		this.children.AvatarNameButton[0].UpdateProps(newProps);
+		const selectedChat = store.GetSelectedChat();
+		if (Object.keys(this.children).length !== 0) {
+			this.children.AvatarNameButton[0].UpdateProps({
+				avatar: selectedChat?.avatar || '',
+			} as IAvatarNameButtonProps);
+		}
+		this.renderMessage(selectedChat?.messages || []);
 		super.UpdateProps(newProps);
 	}
+
+	public CleanChat() {
+		if (this.socket) {
+			this.socket.Close();
+			this.socket = null;
+		}
+	}
 }
+
+const mapStateToProps = (state: IState) => ({
+	selectedChat: state.selectedChat,
+});
+
+export const Chat = withStorePage(ChatBase as typeof Block, mapStateToProps);
+

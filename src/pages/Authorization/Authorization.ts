@@ -2,20 +2,18 @@ import './Authorization.scss';
 
 import template from './template';
 import { Header } from '../../components/Header/Header';
-import { LOGIN_FIELDS, TEST_LINK_DATA } from './Authorization.interface';
-import { Link } from '../../components/Link/Link';
-import { Page } from '../../templateUtils/Page';
+import { LOGIN_FIELDS } from './Authorization.interface';
+import { Page } from '../../core/Page/Page';
 import { SignButtons } from '../../modules/SignButtons/SignButtons';
 import { FormControl } from '../../modules/FormControl/FormControl';
 import { Form } from '../../modules/Form/Form';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
+import { ISignInData } from '../../service/Auth/Auth.interface';
+import AuthController from '../../controller/AuthController';
 
 export class Authorization extends Page {
-	protected init() {
-		super.init();
-
-		const form = new Form({
-			fields: this.createFields(),
-		});
+	protected async init() {
+		await super.init();
 
 		this.children = {
 			Header: [
@@ -23,21 +21,19 @@ export class Authorization extends Page {
 					title: 'Добро пожаловать!',
 				}),
 			],
-			Link: TEST_LINK_DATA.map(link => {
-				return new Link({
-					text: link.text,
-					url: link.url,
-				});
-			}),
 			SignButtons: [
 				new SignButtons({
 					submitButtonText: 'Войти',
-					linkUrl: '/registration',
+					linkPage: ROUTE.sign_up,
 					linkButtonText: 'Создать пользователя',
-					submitAction: () => form.SubmitForm(),
+					submitAction: () => this.onSubmit(),
 				}),
 			],
-			Form: [form],
+			Form: [
+				new Form({
+					fields: this.createFields(),
+				}),
+			],
 		};
 	}
 
@@ -46,6 +42,16 @@ export class Authorization extends Page {
 			return new FormControl(field.inputProps).AddValidators(field.validators);
 		});
 	}
+
+	protected onSubmit = async () => {
+		const form = this.children.Form[0] as Form;
+		form.Validate();
+		if (!form.IsValid) {
+			return;
+		}
+		const formData = form.SubmitForm() as ISignInData;
+		await AuthController.SignIn(formData);
+	};
 
 	render() {
 		return template;

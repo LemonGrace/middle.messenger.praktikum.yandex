@@ -1,11 +1,11 @@
 import './FormControl.scss';
 import template from './template';
 
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { Input } from '../../components/FormContolElements/Input/Input';
 import { Validator } from '../../utils/validator';
 import { MaybeArray, NeedArray } from '../../utils/NeedArray';
-import { Props } from '../../templateUtils/Block.interface';
+import { Props } from '../../core/Block/Block.interface';
 import { IInputProps } from '../../components/FormContolElements/Input/Input.interface';
 import { ErrorLabel } from '../../components/FormContolElements/ErrorLabel/ErrorLabel';
 
@@ -18,8 +18,8 @@ export class FormControl extends Block<IInputProps> {
 		super(props, 'FormControl');
 	}
 
-	protected init() {
-		super.init();
+	protected async init() {
+		await super.init();
 		this.children = {
 			Input: [
 				new Input({
@@ -40,8 +40,18 @@ export class FormControl extends Block<IInputProps> {
 		};
 	}
 
-	render() {
+	protected render() {
 		return template;
+	}
+
+	protected updateError(): void {
+		this.children.ErrorLabel[0].UpdateProps({
+			errorText: !this.errors.length ? '' : Object.values(this.errors[0])[0],
+		} as Props);
+	}
+
+	protected setValue(value: any): void {
+		(this.children.Input[0].Element as HTMLInputElement).value = value;
 	}
 
 	public get IsValid(): boolean {
@@ -67,9 +77,7 @@ export class FormControl extends Block<IInputProps> {
 			isError: !!this.errors.length,
 			value,
 		} as Props);
-		this.children.ErrorLabel[0].UpdateProps({
-			errorText: !this.errors.length ? '' : Object.values(this.errors[0])[0],
-		} as Props);
+		this.updateError();
 	}
 
 	public AddValidators(validators: MaybeArray<Validator>): this {
@@ -80,8 +88,25 @@ export class FormControl extends Block<IInputProps> {
 		return this;
 	}
 
+	public AddError(error: Record<string, string>): this {
+		this.errors = [
+			...this.errors,
+			error,
+		];
+		this.children.Input[0].UpdateProps({
+			...this.props,
+			isError: !!this.errors.length,
+		} as Props);
+		this.updateError();
+		return this;
+	}
+
 	public get Value(): any {
 		return (this.children.Input[0].Element as HTMLInputElement).value;
+	}
+
+	public set Value(value: any) {
+		(this.children.Input[0].Element as HTMLInputElement).value = value;
 	}
 
 	public get FormControlName(): string {

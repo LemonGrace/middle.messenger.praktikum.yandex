@@ -1,20 +1,19 @@
 import './Registration.scss';
-import { Page } from '../../templateUtils/Page';
+import { Page } from '../../core/Page/Page';
 import { Form } from '../../modules/Form/Form';
 import { Header } from '../../components/Header/Header';
 import { SignButtons } from '../../modules/SignButtons/SignButtons';
 import { FormControl } from '../../modules/FormControl/FormControl';
 
 import template from './template';
-import { REGISTRATION_FIELDS } from './Registration.interface';
+import { IRegistrationFormData, REGISTRATION_FIELDS } from './Registration.interface';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
+import AuthController from '../../controller/AuthController';
+import { ISignUpData } from '../../service/Auth/Auth.interface';
 
 export class Registration extends Page {
-	protected init() {
-		super.init();
-
-		const form = new Form({
-			fields: this.createFields(),
-		});
+	protected async init() {
+		await super.init();
 
 		this.children = {
 			Header: [
@@ -25,12 +24,16 @@ export class Registration extends Page {
 			SignButtons: [
 				new SignButtons({
 					submitButtonText: 'Создать пользователя',
-					linkUrl: '/',
+					linkPage: ROUTE.sign_in,
 					linkButtonText: 'Уже зарегистрированы?',
-					submitAction: () => form.SubmitForm(),
+					submitAction: () => this.onSubmit(),
 				}),
 			],
-			Form: [form],
+			Form: [
+				new Form({
+					fields: this.createFields(),
+				}),
+			],
 		};
 	}
 
@@ -39,6 +42,25 @@ export class Registration extends Page {
 			return new FormControl(field.inputProps).AddValidators(field.validators);
 		});
 	}
+
+	protected onSubmit = async () => {
+		const form = this.children.Form[0] as Form;
+		form.Validate();
+		if (!form.IsValid) {
+			return;
+		}
+		const formData = form.SubmitForm() as IRegistrationFormData;
+		if (formData.password !== formData.password_repeat) {
+			const passwordRepeatControl = (this.children.Form[0] as Form)
+				.Controls.find(control => control.FormControlName === 'password_repeat');
+			passwordRepeatControl?.AddError({
+				different: 'Пароли не совпадают',
+			});
+			return;
+		}
+		delete formData.password_repeat;
+		await AuthController.SignUp(formData as ISignUpData);
+	};
 
 	render() {
 		return template;

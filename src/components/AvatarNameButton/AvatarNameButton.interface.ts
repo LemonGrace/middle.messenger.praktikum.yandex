@@ -1,7 +1,7 @@
-import { Props } from '../../templateUtils/Block.interface';
+import { Props } from '../../core/Block/Block.interface';
 
 export interface IAvatarNameButtonProps extends Props {
-	username: string,
-	userImg: string,
+	name: string,
+	avatar: string,
 	isCustomClick?: boolean,
 }

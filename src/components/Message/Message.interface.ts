@@ -1,10 +1,6 @@
-import { Props } from '../../templateUtils/Block.interface';
+import { IChatMessage } from '../../service/Chats/Chats.interface';
 
-export interface IMessageProps extends Props {
-	id: string,
-	text: string,
-	isOuterMessage: boolean,
-	time: string,
-	userImg: string,
-	username: string,
+export interface IMessageProps extends IChatMessage {
+	isOuterMessage?: boolean,
+	user_avatar: string,
 }

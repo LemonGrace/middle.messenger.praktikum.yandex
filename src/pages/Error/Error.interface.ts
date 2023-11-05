@@ -1,4 +1,4 @@
-import { Props } from '../../templateUtils/Block.interface';
+import { Props } from '../../core/Block/Block.interface';
 
 export enum ERROR_TYPE {
 	STATUS_5 = '5',

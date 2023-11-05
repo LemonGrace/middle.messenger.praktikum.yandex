@@ -1,6 +1,7 @@
-import { Props } from '../../templateUtils/Block.interface';
+import { Props } from '../../core/Block/Block.interface';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
 
 export interface IAlertProps extends Props {
-	url?: string,
+	page?: ROUTE,
 	text: string,
 }

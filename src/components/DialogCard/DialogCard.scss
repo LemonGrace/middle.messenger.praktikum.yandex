@@ -25,9 +25,12 @@
 	&__user {
 		flex-grow: 1;
 		flex-shrink: 1;
+		overflow: hidden;
 
 		&__name {
 			color: $base-raisin-black;
+			overflow: hidden;
+			text-overflow: ellipsis;
 
 			@include fs18-lh18-medium;
 
@@ -49,7 +52,6 @@
 		justify-content: flex-end;
 		gap: 8px;
 
-		// TODO доработка динамичного круга
 		&__count {
 			border-radius: 50%;
 			width: 25px;
@@ -63,7 +65,6 @@
 		}
 	}
 
-	// TODO overflow
 	&__text {
 		display: block;
 
