@@ -2,7 +2,7 @@ import './Avatar.scss';
 
 import template from './template';
 
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IAvatarProps } from './Avatar.interface';
 import { GenerateImgUrl } from '../../utils/GenerateImgUrl';
 

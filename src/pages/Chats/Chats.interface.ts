@@ -1,4 +1,4 @@
-import { IPageProps } from '../../templateUtils/Page';
+import { IPageProps } from '../../core/Page/Page';
 
 export interface IMessageResponse {
 	messageID: string,

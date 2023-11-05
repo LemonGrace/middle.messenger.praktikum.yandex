@@ -1,4 +1,4 @@
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IMessageProps } from './Message.interface';
 import template from './template';
 import './Message.scss';

@@ -7,6 +7,7 @@ import {
 	phoneValidator,
 	Validator,
 } from '../../utils/validator';
+import { ISignUpData } from '../../service/Auth/Auth.interface';
 
 export const REGISTRATION_FIELDS: Array<{
 	inputProps: IInputProps,
@@ -36,22 +37,22 @@ export const REGISTRATION_FIELDS: Array<{
 		},
 		validators: phoneValidator,
 	},
-	{
-		inputProps: {
-			label: 'Почта',
-			type: 'email',
-			name: 'email',
-		},
-		validators: emailValidator,
-	},
-	{
-		inputProps: {
-			label: 'Логин',
-			type: 'text',
-			name: 'login',
-		},
-		validators: loginValidator,
-	},
+	// {
+	// 	inputProps: {
+	// 		label: 'Почта',
+	// 		type: 'email',
+	// 		name: 'email',
+	// 	},
+	// 	validators: emailValidator,
+	// },
+	// {
+	// 	inputProps: {
+	// 		label: 'Логин',
+	// 		type: 'text',
+	// 		name: 'login',
+	// 	},
+	// 	validators: loginValidator,
+	// },
 	// TODO валидация на совпадение
 	{
 		inputProps: {
@@ -60,7 +61,9 @@ export const REGISTRATION_FIELDS: Array<{
 			name: 'password',
 			placeholder: 'Введите пароль',
 		},
-		validators: passwordValidator,
+		// TODO
+		// validators: passwordValidator,
+		validators: null,
 	},
 	{
 		inputProps: {
@@ -69,6 +72,9 @@ export const REGISTRATION_FIELDS: Array<{
 			name: 'password_repeat',
 			placeholder: 'Повторите пароль',
 		},
-		validators: passwordValidator,
+		// TODO
+		validators: null,
 	},
 ];
+
+export type IRegistrationFormData = ISignUpData & { password_repeat: string } | null;

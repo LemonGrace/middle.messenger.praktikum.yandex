@@ -5,7 +5,9 @@ import template from './template';
 import { IErrorPageProps } from './Error.interface';
 import { Alert } from '../../components/Alert/Alert';
 import { getErrorMessage } from './Error.utils';
-import { Page } from '../../templateUtils/Page';
+import { Page } from '../../core/Page/Page';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
+
 
 export class Error extends Page<IErrorPageProps> {
 	protected init() {
@@ -16,7 +18,7 @@ export class Error extends Page<IErrorPageProps> {
 			}),
 			new Alert({
 				text: 'Назад к сообщениям',
-				url: '/main',
+				page: ROUTE.messenger,
 			}),
 		];
 	}

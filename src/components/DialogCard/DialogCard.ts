@@ -1,5 +1,5 @@
 import './DialogCard.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { Avatar } from '../Avatar/Avatar';
 import template from './template';
 import { IDialogCardProps } from './DialogCard.interface';

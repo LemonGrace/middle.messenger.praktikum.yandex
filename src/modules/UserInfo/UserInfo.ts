@@ -1,5 +1,5 @@
 import './UserInfo.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IUserInfoProps } from './UserInfo.interface';
 import template from './template';
 import Information from '../../components/Information/Information';

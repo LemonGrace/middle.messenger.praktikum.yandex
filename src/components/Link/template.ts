@@ -1,6 +1,6 @@
 // language=hbs
 export default `
-    <a class='link' href='{{ url }}'>
+    <button class='link'>
         {{ text }}
-    </a>
+    </button>
 `;

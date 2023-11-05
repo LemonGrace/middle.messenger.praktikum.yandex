@@ -1,7 +1,7 @@
 import './Alert.scss';
 import template from './template';
 
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IAlertProps } from './Alert.interface';
 import { Link } from '../Link/Link';
 import { ILinkProps } from '../Link/Link.interface';
@@ -13,7 +13,7 @@ export class Alert extends Block<IAlertProps> {
 
 	protected init() {
 		super.init();
-		if (this.props.url) {
+		if (this.props.page) {
 			this.children.Link = [new Link(this.props as ILinkProps)];
 		}
 	}

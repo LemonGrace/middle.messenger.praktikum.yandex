@@ -1,5 +1,5 @@
 import './Information.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import template from './template';
 import { IInformationProps } from './Information.interface';
 

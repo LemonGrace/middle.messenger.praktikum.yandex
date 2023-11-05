@@ -1,5 +1,5 @@
 import './Chats.scss';
-import { Page } from '../../templateUtils/Page';
+import { Page } from '../../core/Page/Page';
 import template from './template';
 import { IconButton } from '../../components/Buttons/IconButton/IconButton';
 import { BUTTON_TYPE } from '../../components/Buttons/IconButton/IconButton.interface';

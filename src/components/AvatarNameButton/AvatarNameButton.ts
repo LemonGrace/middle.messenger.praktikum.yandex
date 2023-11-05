@@ -1,8 +1,10 @@
 import './AvatarNameButton.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { IAvatarNameButtonProps } from './AvatarNameButton.interface';
 import template from './template';
 import { Avatar } from '../Avatar/Avatar';
+import router from '../../controller/Router/Router';
+import { ROUTE } from '../../controller/Router/ROUTES.const';
 
 export class AvatarNameButton extends Block<IAvatarNameButtonProps> {
 	constructor(props: IAvatarNameButtonProps) {
@@ -20,7 +22,7 @@ export class AvatarNameButton extends Block<IAvatarNameButtonProps> {
 		if (!this.props.isCustomClick) {
 			this.props.events = {
 				click: () => {
-					window.open('/profile', '_self');
+					router.Go(ROUTE.settings);
 				},
 			};
 		}

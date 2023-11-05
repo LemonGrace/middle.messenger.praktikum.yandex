@@ -1,5 +1,5 @@
 import './SignButtons.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { ISignButtonsProps } from './SignButtons.interface';
 import { Link } from '../../components/Link/Link';
 import template from './template';
@@ -23,7 +23,7 @@ export class SignButtons extends Block<ISignButtonsProps> {
 			],
 			Link: [
 				new Link({
-					url: this.props.linkUrl,
+					page: this.props.linkPage,
 					text: this.props.linkButtonText,
 				}),
 			],
