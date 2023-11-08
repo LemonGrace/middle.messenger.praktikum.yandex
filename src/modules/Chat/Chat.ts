@@ -1,5 +1,5 @@
 import './Chat.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import template from './template';
 import { IChatProps } from './Chat.interface';
 import { AvatarNameButton } from '../../components/AvatarNameButton/AvatarNameButton';

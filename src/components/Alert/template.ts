@@ -1,7 +1,7 @@
 // language=hbs
 export default `
     <div class='alert__container'>
-        {{#if url}}
+        {{#if page}}
             {{{ Link }}}
         {{else}}
             <div class='alert__text'>

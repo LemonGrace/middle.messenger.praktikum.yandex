@@ -1,5 +1,5 @@
 import './EditProfile.scss';
-import { Page } from '../../templateUtils/Page';
+import { Page } from '../../core/Page/Page';
 import { Form } from '../../modules/Form/Form';
 import { Header } from '../../components/Header/Header';
 import { FormControl } from '../../modules/FormControl/FormControl';

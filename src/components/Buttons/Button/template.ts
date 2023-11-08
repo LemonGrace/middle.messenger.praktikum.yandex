@@ -1,4 +1,4 @@
-// TODO state (disabled, loading)
+// TODO state (loading)
 // language=hbs
 export default `
     <button class='button'>

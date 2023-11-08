@@ -1,4 +1,4 @@
-import { Props } from '../../templateUtils/Block.interface';
+import { Props } from '../../core/Block/Block.interface';
 import { IInputProps } from '../../components/FormContolElements/Input/Input.interface';
 import {
 	emailValidator,

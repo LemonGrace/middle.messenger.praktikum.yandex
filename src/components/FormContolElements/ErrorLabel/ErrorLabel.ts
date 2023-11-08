@@ -1,6 +1,6 @@
 import '../../../modules/FormControl/FormControl.scss';
 
-import { Block } from '../../../templateUtils/Block';
+import { Block } from '../../../core/Block/Block';
 import { IErrorLabel } from './ErrorLabel.interface';
 import template from './template';
 

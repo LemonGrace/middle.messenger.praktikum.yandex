@@ -1,5 +1,5 @@
 import './Header.scss';
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import template from './template';
 import { IHeaderProps } from './Header.interface';
 

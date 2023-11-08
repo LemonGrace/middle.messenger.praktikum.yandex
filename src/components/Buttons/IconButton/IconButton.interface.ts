@@ -1,4 +1,4 @@
-import { Props } from '../../../templateUtils/Block.interface';
+import { Props } from '../../../core/Block/Block.interface';
 
 const DEFAULT_PATH = 'icons/';
 

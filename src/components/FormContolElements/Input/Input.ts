@@ -2,7 +2,7 @@ import '../../../modules/FormControl/FormControl.scss';
 import template from './template';
 
 import { IInputProps } from './Input.interface';
-import { Block } from '../../../templateUtils/Block';
+import { Block } from '../../../core/Block/Block';
 
 export class Input extends Block<IInputProps> {
 	constructor(props: IInputProps) {
