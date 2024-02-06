@@ -8,64 +8,75 @@ import {
 	IChatUpdateAvatar,
 	IChatUser,
 } from '../service/Chats/Chats.interface';
-import { NeedArray } from '../utils/NeedArray';
+import { needArray } from '../utils/NeedArray';
 
 class ChatsController {
 	private api = new ChatsAPI();
 
+	protected async handleError(error: unknown): Promise<void> {
+		await messageController.showError(error instanceof Error
+			? error : new Error('Что-то пошло не так, повторите попытку позже'));
+	}
+
 	protected updateChats(updatedChat: IChatActive): void {
-		const updatedChats = store.GetChats()?.map(chat => chat.id === updatedChat?.id ? updatedChat : chat);
-		store.Set('chats', updatedChats);
+		const updatedChats = store.getChats()?.map(chat => chat.id === updatedChat?.id ? updatedChat : chat);
+		store.set('chats', updatedChats);
 	}
 
-	public async CreateChat(data: IChatCreate): Promise<void> {
-		const [, error] = await this.api.CreateChat(data);
-		if (error) {
-			await messageController.ShowError(error);
+	public async createChat(data: IChatCreate): Promise<void> {
+		try {
+			await this.api.createChat(data);
+			await this.getChats(true);
+		} catch (error) {
+			await this.handleError(error);
+		}
+	}
+
+	public async getChats(isUpdate = false): Promise<void> {
+		if (store.getChats()?.length && !isUpdate) {
 			return;
 		}
-		await this.GetChats(true);
-	}
-
-	public async GetChats(isUpdate = false): Promise<void> {
-		if (store.GetChats()?.length && !isUpdate) {
-			return;
-		}
-		const [chats, error] = await this.api.GetChats();
-		if (error) {
-			await messageController.ShowError(error);
-		}
-		if (chats) {
-			store.Set('chats', chats);
+		try {
+			const [chats] = await this.api.getChats();
+			if (chats) {
+				store.set('chats', chats);
+			}
+		} catch (error) {
+			await this.handleError(error);
 		}
 	}
 
-	public async GetChatUsers(data: IChatInfo): Promise<IChatUser[]> {
-		const [users, error] = await this.api.GetChatUsers(data);
-		if (error) {
-			await messageController.ShowError(error);
+	public async getChatUsers(data: IChatInfo): Promise<IChatUser[]> {
+		try {
+			const [users] = await this.api.getChatUsers(data);
+			return users as IChatUser[];
+		} catch (error) {
+			await this.handleError(error);
 			return [];
 		}
-		return users as IChatUser[];
 	}
 
-	public async GetChatToken(data: IChatInfo): Promise<string> {
-		const [response, error] = await this.api.GetChatToken(data);
-		if (error || response?.token === '') {
-			await messageController.ShowError(error || new Error('token is empty'));
+	public async getChatToken(data: IChatInfo): Promise<string> {
+		try {
+			const [response] = await this.api.getChatToken(data);
+			if (!response || !response?.token) {
+				await this.handleError(new Error('token is empty'));
+			}
+			return response?.token || '';
+		} catch (error) {
+			await this.handleError(error);
 			return '';
 		}
-		return response?.token;
 	}
 
-	public async UpdateMessages(messages: ReadonlyArray<IChatMessage> | IChatMessage): Promise<void> {
-		let chat = store.GetSelectedChat();
+	public async updateMessages(messages: ReadonlyArray<IChatMessage> | IChatMessage): Promise<void> {
+		let chat = store.getSelectedChat();
 		if (!chat) {
 			return;
 		}
-		let messagesArray = NeedArray(messages);
+		let messagesArray = needArray(messages);
 		if (messagesArray.length === 1) {
-			const user = store.GetUser();
+			const user = store.getUser();
 			if (user) {
 				chat = {
 					...chat,
@@ -88,53 +99,56 @@ class ChatsController {
 			...chat.messages,
 			...messagesArray,
 		];
-		store.Set('selectedChat.messages', messagesArray.sort((
+		store.set('selectedChat.messages', messagesArray.sort((
 			chat1, chat2,
 		) => new Date(chat1.time).getTime() - new Date(chat2.time).getTime()));
 	}
 
-	public async AddChatUsers(data: IChatActionUsers): Promise<boolean> {
-		const [, error] = await this.api.AddChatUsers(data);
-		if (error) {
-			await messageController.ShowError(error);
+	public async addChatUsers(data: IChatActionUsers): Promise<boolean> {
+		try {
+			await this.api.addChatUsers(data);
+			return true;
+		} catch (error) {
+			await this.handleError(error);
 			return false;
 		}
-		return true;
 	}
 
-	public async DeleteChatUsers(data: IChatActionUsers): Promise<boolean> {
-		const [, error] = await this.api.DeleteChatUsers(data);
-		if (error) {
-			await messageController.ShowError(error);
+	public async deleteChatUsers(data: IChatActionUsers): Promise<boolean> {
+		try {
+			await this.api.deleteChatUsers(data);
+			return true;
+		} catch (error) {
+			await this.handleError(error);
 			return false;
 		}
-		return true;
 	}
 
-	public async UpdateChatAvatar(data: IChatUpdateAvatar): Promise<void> {
-		const formData = new FormData();
-		formData.append('chatId', data.chatId.toString());
-		formData.append('avatar', data.avatar);
-		const [response, error] = await this.api.UpdateAvatar(formData);
-		if (error) {
-			await messageController.ShowError(error);
+	public async updateChatAvatar(data: IChatUpdateAvatar): Promise<void> {
+		try {
+			const formData = new FormData();
+			formData.append('chatId', data.chatId.toString());
+			formData.append('avatar', data.avatar);
+			const [response] = await this.api.updateAvatar(formData);
+			const updatedChat = store.getSelectedChat();
+			if (!updatedChat || !response?.avatar) {
+				return;
+			}
+			store.set('selectedChat.avatar', response.avatar);
+			this.updateChats(updatedChat);
+		} catch (error) {
+			await this.handleError(error);
 		}
-
-		const updatedChat = store.GetSelectedChat();
-		if (!updatedChat || !response?.avatar) {
-			return;
-		}
-		store.Set('selectedChat.avatar', response.avatar);
-		this.updateChats(updatedChat);
 	}
 
-	public async DeleteChat(data: IChatInfo): Promise<void> {
-		const [, error] = await this.api.DeleteChat(data);
-		if (error) {
-			await messageController.ShowError(error);
+	public async deleteChat(data: IChatInfo): Promise<void> {
+		try {
+			await this.api.deleteChat(data);
+			store.set('chats', store.getChats().filter(_chat => _chat.id !== data.chatId));
+			store.set('selectedChat', null);
+		} catch (error) {
+			await this.handleError(error);
 		}
-		store.Set('chats', store.GetChats().filter(_chat => _chat.id !== data.chatId));
-		store.Set('selectedChat', null);
 	}
 }
 

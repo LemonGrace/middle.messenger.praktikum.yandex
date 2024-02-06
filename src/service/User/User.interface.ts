@@ -1,5 +1,6 @@
+import { IObject } from '../../utils/IObject';
 
-export interface IUserProfileData {
+export interface IUserProfileData extends IObject {
     first_name: string;
     second_name: string;
     display_name: string;
@@ -8,7 +9,7 @@ export interface IUserProfileData {
     phone: string;
 }
 
-export interface IUserPasswordData {
+export interface IUserPasswordData extends IObject {
     newPassword: string,
     oldPassword: string
 }

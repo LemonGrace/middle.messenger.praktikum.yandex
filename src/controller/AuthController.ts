@@ -8,51 +8,61 @@ import store from '../core/Store/Store';
 class AuthController {
 	private api = new AuthAPI();
 
-	public async SignIn(data: ISignInData): Promise<void> {
-		const [, error] = await this.api.SignIn(data);
-		if (error) {
-			await messageController.ShowError(error);
-			return;
-		}
-		await this.FetchUser();
-		await Router.Go(ROUTE.messenger);
+	protected async handleError(error: unknown): Promise<void> {
+		await messageController.showError(error instanceof Error
+			? error : new Error('Что-то пошло не так, повторите попытку позже'));
 	}
-
-	public async SignUp(data: ISignUpData): Promise<void> {
-		const [response, error] = await this.api.SignUp(data);
-		if (error || !response?.id) {
-			await messageController.ShowError(error || new Error('Что-то пошло не так, повторите попытку позже'));
-			return;
-		}
-		await Router.Go(ROUTE.messenger);
-	}
-
-	public async LogOut(): Promise<void> {
-		store.Clean();
-		const [, error] = await this.api.LogOut();
-		if (error) {
-			await messageController.ShowError(error);
-			return;
-		}
-		await Router.Go(ROUTE.sign_in);
-	}
-
-	public async FetchUser(isShowError = false): Promise<void> {
-		if (store.GetUser()) {
-			return;
-		}
-		const [user, error] = await this.api.GetUser();
-		if (error && isShowError) {
-			await messageController.ShowError(error);
-		}
-		if (user) {
-			store.Set('user', user);
+	public async signIn(data: ISignInData): Promise<void> {
+		try {
+			await this.api.signIn(data);
+			await this.fetchUser();
+			await Router.go(ROUTE.messenger);
+		} catch (error) {
+			await this.handleError(error);
 		}
 	}
 
-	public async IsUserActive(): Promise<boolean> {
-		await this.FetchUser();
-		const user = store.GetUser();
+	public async signUp(data: ISignUpData): Promise<void> {
+		try {
+			const [response] = await this.api.signUp(data);
+			if (!response?.id) {
+				await this.handleError(new Error('Не найден id'));
+			}
+			await Router.go(ROUTE.messenger);
+		} catch (error) {
+			await this.handleError(error);
+		}
+	}
+
+	public async logOut(): Promise<void> {
+		try {
+			store.clean();
+			await this.api.logOut();
+			await Router.go(ROUTE.sign_in);
+		} catch (error) {
+			await this.handleError(error);
+		}
+	}
+
+	public async fetchUser(isShowError = false): Promise<void> {
+		if (store.getUser()) {
+			return;
+		}
+		try {
+			const [user] = await this.api.getUser();
+			if (user) {
+				store.set('user', user);
+			}
+		} catch (error) {
+			if (isShowError) {
+				await this.handleError(error);
+			}
+		}
+	}
+
+	public async isUserActive(): Promise<boolean> {
+		await this.fetchUser();
+		const user = store.getUser();
 		return !!user;
 	}
 }

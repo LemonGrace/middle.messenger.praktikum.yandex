@@ -1,6 +1,6 @@
 const DAY = 1000 * 3600 * 24;
 const NOW = new Date();
-export function BeautifyDate(date: string, withDay = false): string {
+export function beautifyDate(date: string, withDay = false): string {
 	if (!date) {
 		return '';
 	}

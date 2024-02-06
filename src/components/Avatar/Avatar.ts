@@ -4,14 +4,14 @@ import template from './template';
 
 import { Block } from '../../core/Block/Block';
 import { IAvatarProps } from './Avatar.interface';
-import { GenerateImgUrl } from '../../utils/GenerateImgUrl';
+import { generateImgUrl } from '../../utils/GenerateImgUrl';
 import { HTTPTransport } from '../../core/HTTPTransport/HTTPTransport';
 
 export class Avatar extends Block<IAvatarProps> {
 	constructor(props: IAvatarProps) {
 		const propsFormatted = props;
 		propsFormatted.userImg = !propsFormatted.userImg
-			? GenerateImgUrl('defaultAvatar.jpg')
+			? generateImgUrl('defaultAvatar.jpg')
 			: `${HTTPTransport.API_URL}/resources${propsFormatted.userImg}`;
 		super(propsFormatted, 'Avatar');
 	}
@@ -20,10 +20,10 @@ export class Avatar extends Block<IAvatarProps> {
 		return template;
 	}
 
-	public UpdateProps(nextProps: Partial<IAvatarProps>) {
+	public updateProps(nextProps: Partial<IAvatarProps>) {
 		nextProps.userImg = !nextProps.userImg
-			? GenerateImgUrl('defaultAvatar.jpg')
+			? generateImgUrl('defaultAvatar.jpg')
 			: `${HTTPTransport.API_URL}/resources${nextProps.userImg}`;
-		super.UpdateProps(nextProps);
+		super.updateProps(nextProps);
 	}
 }

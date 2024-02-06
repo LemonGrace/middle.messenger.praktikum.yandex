@@ -15,7 +15,7 @@ const rules: Array<(value: string) => string> = [
 	(_value) => _value.replace(/^((-)?\.)/, '$20.'),
 ];
 
-export const ParseNumber: IParseNumber = (value) => {
+export const parseNumber: IParseNumber = (value) => {
 	if (typeof value === 'string') {
 		for (const rule of rules) {
 			value = rule(value);

@@ -23,7 +23,7 @@ export class AvatarNameButton extends Block<IAvatarNameButtonProps> {
 		if (!this.props.isCustomClick) {
 			this.props.events = {
 				click: async () => {
-					await router.Go(ROUTE.profile);
+					await router.go(ROUTE.profile);
 				},
 			};
 		}
@@ -33,12 +33,12 @@ export class AvatarNameButton extends Block<IAvatarNameButtonProps> {
 		return template;
 	}
 
-	public UpdateProps(newProps: Partial<IAvatarNameButtonProps>): void {
+	public updateProps(newProps: Partial<IAvatarNameButtonProps>): void {
 		if (newProps.avatar) {
-			this.children.Avatar[0].UpdateProps({
+			this.children.Avatar[0].updateProps({
 				userImg: newProps.avatar,
 			} as IAvatarProps);
 		}
-		super.UpdateProps(newProps);
+		super.updateProps(newProps);
 	}
 }

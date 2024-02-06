@@ -12,9 +12,9 @@ window.addEventListener('DOMContentLoaded', async () => {
 	const root = document.getElementById('app');
 	if (root) {
 		for (const path of Object.values(ROUTE)) {
-			router.Use(path, ROUTE_PAGE[path], ROUTE_PAGE_DATA[path]);
+			router.use(path, ROUTE_PAGE[path], ROUTE_PAGE_DATA[path]);
 		}
 
-		await router.Start();
+		await router.start();
 	}
 });

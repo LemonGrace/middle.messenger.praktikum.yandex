@@ -16,7 +16,7 @@ export class Input extends Block<IInputProps> {
 	protected componentDidMount() {
 		super.componentDidMount();
 		if (this.props.isError) {
-			this.Element?.classList.add('form-control__input-error');
+			this.element?.classList.add('form-control__input-error');
 		}
 	}
 

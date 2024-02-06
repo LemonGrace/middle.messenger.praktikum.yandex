@@ -2,11 +2,11 @@ import '../Button.scss';
 import { Block } from '../../../core/Block/Block';
 import template from './template';
 import { IButtonProps } from './Button.interface';
-import { ToUpperCase } from '../../../utils/ToUpperCase';
+import { toUpperCase } from '../../../utils/ToUpperCase';
 
 export class Button extends Block<IButtonProps> {
 	constructor(props: IButtonProps) {
-		props.text = ToUpperCase(props.text);
+		props.text = toUpperCase(props.text);
 		super(props, 'Button');
 	}
 

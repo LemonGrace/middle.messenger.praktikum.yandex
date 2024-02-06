@@ -1,5 +1,6 @@
 import { FormControl } from '../FormControl';
 import { IInputProps } from '../../../components/FormContolElements/Input/Input.interface';
+import ModalController from '../../../controller/ModalController';
 const ACCEPT_FILE = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
 
 export class ImageFormControl extends FormControl {
@@ -7,13 +8,13 @@ export class ImageFormControl extends FormControl {
 	protected async init() {
 		await super.init();
 		const input = this.children.Input[0];
-		input.UpdateProps({
+		input.updateProps({
 			accept: ACCEPT_FILE.join(', '),
 			events: {
 				click: () => {
 					this.setValue(null);
 				},
-				change: (event) => {
+				change: async (event) => {
 					this.isTouched = true;
 					const files = (<HTMLInputElement>event?.target).files;
 					if (!files) {
@@ -21,11 +22,14 @@ export class ImageFormControl extends FormControl {
 					}
 					if (ACCEPT_FILE.includes(files[0].type)) {
 						this.value = files[0];
+					} else {
+						await ModalController.showError(new Error('Вы пытаетесь загрузить неверный формат'));
+						return;
 					}
-					input.UpdateProps({
+					input.updateProps({
 						value: files[0],
 					} as IInputProps);
-					this.DispatchComponentDidMount();
+					this.dispatchComponentDidMount();
 				},
 			},
 		});
@@ -33,13 +37,13 @@ export class ImageFormControl extends FormControl {
 
 	protected componentDidMount() {
 		const input = this.children.Input[0];
-		input.Element?.classList.add('form-control__input-file');
+		input.element?.classList.add('form-control__input-file');
 		if (this.value) {
-			input.Element?.classList.add('form-control__input-file-active');
+			input.element?.classList.add('form-control__input-file-active');
 		} else {
-			input.Element?.classList.remove('form-control__input-file-active');
+			input.element?.classList.remove('form-control__input-file-active');
 		}
-		input.DispatchComponentDidMount();
+		input.dispatchComponentDidMount();
 	}
 
 	public get Value(): File | null {

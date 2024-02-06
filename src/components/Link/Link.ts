@@ -10,7 +10,7 @@ export class Link extends Block<ILinkProps> {
 		super(props, 'Link');
 		this.props.events = {
 			click: () => {
-				router.Go(props.page);
+				router.go(props.page);
 			},
 		};
 	}

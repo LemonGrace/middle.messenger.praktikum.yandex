@@ -13,7 +13,7 @@ export default class Socket {
 	constructor({ chatID, token }: ISocket) {
 		this._chatId = chatID;
 		this._token = token;
-		this._userId = store.GetUser()?.id || 0;
+		this._userId = store.getUser()?.id || 0;
 		this.socket = this.createConnection();
 
 		this.start();
@@ -37,15 +37,15 @@ export default class Socket {
 		this.socket.addEventListener('message', async (event: MessageEvent) => {
 			try {
 				const messages = JSON.parse(event.data);
-				await ChatsController.UpdateMessages(messages);
+				await ChatsController.updateMessages(messages);
 			} catch (error) {
-				await messageController.ShowError(new Error('Повторите попытку позже'));
+				await messageController.showError(new Error('Повторите попытку позже'));
 			}
 		});
 
 		this.socket.addEventListener('error', (event) => console.error('Ошибка', event));
 		this.socket.onopen = (() => {
-			this.GetMessages();
+			this.getMessages();
 		});
 	}
 
@@ -53,28 +53,21 @@ export default class Socket {
 		setInterval(() => this.socket.send(JSON.stringify({ type: 'ping' })), 10000);
 	}
 
-	public async SendMessage(content: string) {
+	public async sendMessage(content: string) {
 		this.socket.send(JSON.stringify({
 			content,
 			type: 'message',
 		}));
-
-		// await chatsController.getAllChats();
-		// store.set('chat.last_message', {
-		// 	user: store.state.user,
-		// 	time: new Date(),
-		// 	content,
-		// });
 	}
 
-	public GetMessages(): void {
+	public getMessages(): void {
 		this.socket.send(JSON.stringify({
 			content: '0',
 			type: 'get old',
 		}));
 	}
 
-	public Close(): void {
+	public close(): void {
 		return this.socket.close();
 	}
 }

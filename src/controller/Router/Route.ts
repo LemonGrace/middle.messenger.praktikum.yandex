@@ -1,12 +1,12 @@
 import { Block } from '../../core/Block/Block';
 import { Props } from '../../core/Block/Block.interface';
-import { IsEqual } from '../../utils/IsEqual';
+import { isEqual } from '../../utils/IsEqual';
 
 const render = (query: string, block: Block): Element | null => {
 	const root = document.querySelector(query);
 
 	if (root) {
-		const content = block.GetContent();
+		const content = block.getContent();
 		if (content) {
 			root.appendChild(content);
 		}
@@ -28,20 +28,20 @@ export class Route {
 		this._props = props;
 	}
 
-	public Match(pathname: string): boolean {
-		return IsEqual(pathname, this._pathname);
+	public match(pathname: string): boolean {
+		return isEqual(pathname, this._pathname);
 	}
 
-	public Render(): void {
+	public render(): void {
 		if (!this._block) {
 			this._block = new this._blockClass(this._props);
 			render(this._props.rootQuery, this._block);
 		}
 	}
 
-	public Leave(): void {
+	public leave(): void {
 		if (this._block) {
-			this._block.DispatchComponentWillUnMount();
+			this._block.dispatchComponentWillUnMount();
 			this._block = null;
 		}
 	}

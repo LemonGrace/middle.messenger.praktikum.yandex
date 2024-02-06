@@ -1,3 +1,5 @@
+import { IObject } from '../../utils/IObject';
+
 export enum METHOD {
     GET = 'GET',
     POST = 'POST',
@@ -5,9 +7,8 @@ export enum METHOD {
     DELETE = 'DELETE',
 }
 
-export type IObject = Record<string, any>;
 export interface IDispatchOptions {
-    data?: IObject;
+    data?: IObject | FormData;
     params?: object;
 }
 export interface IRequestOptions extends IDispatchOptions {

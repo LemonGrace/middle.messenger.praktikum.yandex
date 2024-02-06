@@ -28,30 +28,30 @@ class Router {
 		}
 
 		if (this._currentRoute) {
-			this._currentRoute.Leave();
+			this._currentRoute.leave();
 		}
 
 		this._currentRoute = route;
-		route.Render();
+		route.render();
 	}
 
 	protected getRoute(pathname: string): Route | null {
-		const route = this.routes.find((route) => route.Match(pathname));
+		const route = this.routes.find((route) => route.match(pathname));
 		if (!route) {
-			return this.routes.find((route) => route.Match('/404')) || null;
+			return this.routes.find((route) => route.match('/404')) || null;
 		}
 		return route;
 	}
 
 	protected async isUserActive(): Promise<boolean> {
-		return AuthController.IsUserActive();
+		return AuthController.isUserActive();
 	}
 
 	protected isRouteProtected(pathname: ROUTE): boolean {
 		return !Router.__notProtectedRoute.find(route => route === pathname);
 	}
 
-	public Use(pathname: string, block: new (props: Props, tagName?: string) => Block, props?: Props): this {
+	public use(pathname: string, block: new (props: Props, tagName?: string) => Block, props?: Props): this {
 		const route = new Route(pathname, block, {
 			...props,
 			rootQuery: this._rootQuery,
@@ -60,30 +60,30 @@ class Router {
 		return this;
 	}
 
-	public async Start(): Promise<void> {
+	public async start(): Promise<void> {
 		window.onpopstate = (event: PopStateEvent) => {
 			this.onRoute((event.currentTarget as typeof window)?.location.pathname);
 		};
-		await this.Go(window.location.pathname as ROUTE);
+		await this.go(window.location.pathname as ROUTE);
 	}
 
-	public async Go(pathname: ROUTE): Promise<void> {
+	public async go(pathname: ROUTE): Promise<void> {
 		const isUserActive = await this.isUserActive();
 		if (isUserActive && [ROUTE.sign_in, ROUTE.sign_up].includes(pathname)) {
-			return this.Go(ROUTE.messenger);
+			return this.go(ROUTE.messenger);
 		}
 		if (this.isRouteProtected(pathname) && !isUserActive) {
-			return this.Go(ROUTE.sign_in);
+			return this.go(ROUTE.sign_in);
 		}
 		this.history.pushState({}, '', pathname);
 		return this.onRoute(pathname);
 	}
 
-	public Back(): void {
+	public back(): void {
 		this.history.back();
 	}
 
-	public Forward(): void {
+	public forward(): void {
 		this.history.forward();
 	}
 }

@@ -19,7 +19,7 @@ import { IChat, IChatMessage, IChatUser } from '../../service/Chats/Chats.interf
 import { UserSettings } from '../UsersSettings/UserSettings';
 import Socket from '../../service/WebSocket';
 import { Message } from '../../components/Message/Message';
-import { BeautifyDate } from '../../utils/BeautifyDate';
+import { beautifyDate } from '../../utils/BeautifyDate';
 
 export class ChatBase extends Block {
 	protected users: IChatUser[] = [];
@@ -33,12 +33,12 @@ export class ChatBase extends Block {
 	protected settingsModal: Modal | null = null;
 
 	protected async init() {
-		const chat = this.SelectedChat;
+		const chat = this.selectedChat;
 		if (!chat) {
 			return;
 		}
 		await super.init();
-		this.users = await ChatsController.GetChatUsers({
+		this.users = await ChatsController.getChatUsers({
 			chatId: chat.id,
 		});
 		this.children = {
@@ -48,7 +48,7 @@ export class ChatBase extends Block {
 					name: chat.title || '',
 					isCustomClick: true,
 					events: {
-						click: () => this.OpenSettings(),
+						click: () => this.openSettings(),
 					},
 				}),
 			],
@@ -56,7 +56,7 @@ export class ChatBase extends Block {
 				new IconButton({
 					type: BUTTON_TYPE.chat_settings,
 					events: {
-						click: () => this.OpenSettings(),
+						click: () => this.openSettings(),
 					},
 				}),
 			],
@@ -64,7 +64,7 @@ export class ChatBase extends Block {
 				new IconButton({
 					type: BUTTON_TYPE.delete,
 					events: {
-						click: () => this.DeleteChat(),
+						click: () => this.deleteChat(),
 					},
 				}),
 			],
@@ -94,7 +94,7 @@ export class ChatBase extends Block {
 					name: 'message',
 					placeholder: 'Введите сообщение',
 					type: 'text',
-				}).AddValidators(requiredValidator),
+				}).addValidators(requiredValidator),
 			],
 			Messages: [],
 		};
@@ -114,129 +114,129 @@ export class ChatBase extends Block {
 			],
 		});
 
-		const token = await ChatsController.GetChatToken({
+		const token = await ChatsController.getChatToken({
 			chatId: chat.id,
 		});
 		if (token) {
 			this.token = token;
-			await this.OpenSocket();
+			await this.openSocket();
 		}
 	}
 
-	protected async OpenSocket(): Promise<void> {
+	protected async openSocket(): Promise<void> {
 		this.socket = new Socket({
-			chatID: this.SelectedChat?.id || 0,
+			chatID: this.selectedChat?.id || 0,
 			token: this.token,
 		});
 	}
 
 	protected async sendMessage(): Promise<void> {
 		const messageControl = (<FormControl> this.children.FormControl[0]);
-		const message = messageControl.Value;
+		const message = messageControl.Value as string;
 		if (message) {
-			this.socket?.SendMessage(message);
+			this.socket?.sendMessage(message);
 			messageControl.Value = null;
 		}
 	}
 
 	protected renderMessage(messageList: ReadonlyArray<IChatMessage>): void {
-		const user = store.GetUser();
+		const user = store.getUser();
 		this.children.Messages = messageList.map(message => {
 			const isOuterMessage = message.user_id !== user?.id;
 			const chatUser = this.users.find(user => user?.id === message.user_id);
 			return new Message({
 				...message,
-				time: BeautifyDate(message.time, true),
+				time: beautifyDate(message.time, true),
 				isOuterMessage: isOuterMessage,
 				user_avatar: chatUser?.avatar || '',
 			});
 		});
-		this.DispatchComponentDidUpdate();
+		this.dispatchComponentDidUpdate();
 	}
 
-	protected get SelectedChat(): IChat | null {
-		return store.GetSelectedChat();
+	protected get selectedChat(): IChat | null {
+		return store.getSelectedChat();
 	}
 
 	protected render(): string {
-		if (!this.SelectedChat) {
+		if (!this.selectedChat) {
 			return '';
 		}
 		return template;
 	}
 
-	protected async OpenSettings(): Promise<void> {
+	protected async openSettings(): Promise<void> {
 		if (!this.settingsModal) {
 			return;
 		}
-		const chatId = this.SelectedChat?.id || 0;
-		const isSuccess = <boolean> await messageController.ShowModal(this.settingsModal);
+		const chatId = this.selectedChat?.id || 0;
+		const isSuccess = <boolean> await messageController.showModal(this.settingsModal);
 		if (!isSuccess) {
 			return;
 		}
-		const modalContent = this.settingsModal.Content;
+		const modalContent = this.settingsModal.modalContent;
 		const imageControl = <ImageFormControl> modalContent?.[0];
 		if (imageControl.Value) {
-			await ChatsController.UpdateChatAvatar({
-				chatId:	this.SelectedChat?.id || 0,
+			await ChatsController.updateChatAvatar({
+				chatId:	this.selectedChat?.id || 0,
 				avatar: imageControl.Value,
 			});
 			imageControl.Value = null;
 		}
 
 		const userSettings = (<UserSettings> modalContent?.[1]);
-		const newUsers = userSettings.NewUsers;
+		const newUsers = userSettings.newUsers;
 		if (newUsers.length) {
-			userSettings.Clean();
-			const isSuccess = await ChatsController.AddChatUsers({
+			userSettings.clean();
+			const isSuccess = await ChatsController.addChatUsers({
 				users: newUsers,
 				chatId,
 			});
 			if (isSuccess) {
-				const usersData = await ChatsController.GetChatUsers({
+				const usersData = await ChatsController.getChatUsers({
 					chatId,
 				});
 				this.users = usersData;
-				(<UserSettings> modalContent?.[1]).UpdateProps({
+				(<UserSettings> modalContent?.[1]).updateProps({
 					users: usersData,
 				});
 			}
 		}
 	}
 
-	protected async DeleteChat(): Promise<void> {
-		const isSuccess = <boolean> await messageController.ShowModal(this.deleteChatModal);
+	protected async deleteChat(): Promise<void> {
+		const isSuccess = <boolean> await messageController.showModal(this.deleteChatModal);
 		if (!isSuccess) {
 			return;
 		}
-		await ChatsController.DeleteChat({
-			chatId: this.SelectedChat?.id || 0,
+		await ChatsController.deleteChat({
+			chatId: this.selectedChat?.id || 0,
 		});
 
-		if (!this.SelectedChat) {
-			this.DispatchComponentWillUnMount();
+		if (!this.selectedChat) {
+			this.dispatchComponentWillUnMount();
 		}
 	}
 
-	public async UpdateInit(): Promise<void> {
+	public async updateInit(): Promise<void> {
 		await this.init();
-		this.DispatchComponentDidUpdate();
+		this.dispatchComponentDidUpdate();
 	}
 
-	public UpdateProps(newProps: IChatProps): void {
-		const selectedChat = store.GetSelectedChat();
+	public updateProps(newProps: IChatProps): void {
+		const selectedChat = store.getSelectedChat();
 		if (Object.keys(this.children).length !== 0) {
-			this.children.AvatarNameButton[0].UpdateProps({
+			this.children.AvatarNameButton[0].updateProps({
 				avatar: selectedChat?.avatar || '',
 			} as IAvatarNameButtonProps);
 		}
 		this.renderMessage(selectedChat?.messages || []);
-		super.UpdateProps(newProps);
+		super.updateProps(newProps);
 	}
 
-	public CleanChat() {
+	public cleanChat() {
 		if (this.socket) {
-			this.socket.Close();
+			this.socket.close();
 			this.socket = null;
 		}
 	}

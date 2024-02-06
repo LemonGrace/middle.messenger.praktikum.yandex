@@ -23,36 +23,36 @@ class Store extends EventBus {
 	constructor() {
 		super();
 		// eslint-disable-next-line @typescript-eslint/no-empty-function
-		this.Listen(Store.EVENTS.UPDATE, () => {});
+		this.listen(Store.EVENTS.UPDATE, () => {});
 	}
 
-	public Get(): IState {
+	public get(): IState {
 		return this.state;
 	}
 
-	public Set(path: string, value: unknown): void {
+	public set(path: string, value: unknown): void {
 		set(this.state, path, value);
-		this.Emit(Store.EVENTS.UPDATE, this.state);
+		this.emit(Store.EVENTS.UPDATE, this.state);
 	}
 
-	public GetUser(): IUser | null {
+	public getUser(): IUser | null {
 		return this.state?.user || null;
 	}
 
-	public GetChats(): IChat[] {
+	public getChats(): IChat[] {
 		return this.state.chats;
 	}
 
-	public GetSelectedChat(): IChatActive | null {
+	public getSelectedChat(): IChatActive | null {
 		return this.state?.selectedChat || null;
 	}
 
-	public AddUpdateListener(listener: Handler): void {
+	public addUpdateListener(listener: Handler): void {
 		this.listener = listener;
-		this.Listen(Store.EVENTS.UPDATE, listener);
+		this.listen(Store.EVENTS.UPDATE, listener);
 	}
 
-	public Clean(): void {
+	public clean(): void {
 		this.state = {
 			user: null,
 			chats: [],
@@ -60,9 +60,9 @@ class Store extends EventBus {
 		};
 	}
 
-	public Destroy(): void {
+	public destroy(): void {
 		if (this.listener) {
-			this.UnListen(Store.EVENTS.UPDATE, this.listener);
+			this.unListen(Store.EVENTS.UPDATE, this.listener);
 		}
 	}
 }

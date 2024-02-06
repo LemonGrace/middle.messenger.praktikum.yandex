@@ -2,7 +2,7 @@ import { Modal } from '../components/Modal/Modal';
 import { MODAL_TYPE, TModalReturnData } from '../components/Modal/Modal.interface';
 
 class ModalController {
-	public async ShowError(error: Error): Promise<void> {
+	public async showError(error: Error): Promise<void> {
 		console.warn(error);
 		const modal = new Modal({
 			title: 'Обратите внимание!',
@@ -13,11 +13,11 @@ class ModalController {
 		await new Promise(resolve => {
 			setTimeout(resolve, 1000);
 		});
-		await modal.Open();
+		await modal.open();
 	}
 
-	public async ShowModal(modal: Modal): Promise<TModalReturnData> {
-		return modal.Open();
+	public async showModal(modal: Modal): Promise<TModalReturnData> {
+		return modal.open();
 	}
 }
 

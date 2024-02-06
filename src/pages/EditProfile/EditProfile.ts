@@ -4,14 +4,18 @@ import { Form } from '../../modules/Form/Form';
 import { Header } from '../../components/Header/Header';
 import { FormControl } from '../../modules/FormControl/FormControl';
 import template from './template';
-import { EDIT_PROFILE_FIELDS, IEditProfileFormData } from './EditProfile.interface';
+import {
+	EDIT_PROFILE_FIELDS,
+	FIELDS_USER_CORRELATION,
+	IEditProfileFormData,
+} from './EditProfile.interface';
 import { Button } from '../../components/Buttons/Button/Button';
 import store, { IState } from '../../core/Store/Store';
 import UserController from '../../controller/UserController';
 import { IUserProfileData } from '../../service/User/User.interface';
 import { ROUTE } from '../../controller/Router/ROUTES.const';
 import withStorePage from '../../core/Store/WithStorePage';
-import { IsEqual } from '../../utils/IsEqual';
+import { isEqual } from '../../utils/IsEqual';
 import { ImageFormControl } from '../../modules/FormControl/ImageFormControl/ImageFormControl';
 import Router from '../../controller/Router/Router';
 import { Block } from '../../core/Block/Block';
@@ -42,12 +46,14 @@ export class EditProfileBase extends Page {
 					text: 'Вернуться к профилю',
 					events: {
 						click: async () => {
-							await Router.Go(ROUTE.profile);
+							await Router.go(ROUTE.profile);
 						},
 					},
 				}),
 			],
 		};
+
+		await this.initControls();
 	}
 
 	protected createFields(): FormControl[] {
@@ -55,15 +61,33 @@ export class EditProfileBase extends Page {
 			if (field.inputProps.type === 'file') {
 				return new ImageFormControl(field.inputProps);
 			}
-			return new FormControl(field.inputProps).AddValidators(field.validators);
+			return new FormControl(field.inputProps).addValidators(field.validators);
+		});
+	}
+
+	protected async initControls(): Promise<void> {
+		const user = store.getUser();
+		if (!user) {
+			return;
+		}
+		const form = this.children.Form[0] as Form;
+		/** Ожидаем окончания инициализации */
+		await new Promise(resolve => {
+			setTimeout(resolve, 1000);
+		});
+		form.controls.forEach(control => {
+			const value = FIELDS_USER_CORRELATION[control.formControlName](user);
+			if (value) {
+				control.Value = value;
+			}
 		});
 	}
 
 	protected onSubmit = async () => {
 		const form = this.children.Form[0] as Form;
-		const userData = store.GetUser();
-		form.Validate();
-		const formData: IEditProfileFormData = form.SubmitForm() as IEditProfileFormData;
+		const userData = store.getUser();
+		form.validate();
+		const formData: IEditProfileFormData = form.submitForm() as IEditProfileFormData;
 		const {
 			first_name: firstName,
 			second_name: secondName,
@@ -83,23 +107,23 @@ export class EditProfileBase extends Page {
 			email: userEmail || userData?.email || '',
 			phone: userPhone || userData?.phone || '',
 		};
-		if (!IsEqual(userData, {
+		if (!isEqual(userData, {
 			...mainData,
 			id: userData?.id,
 			avatar: userData?.avatar,
 		})) {
-			await UserController.UpdateUserProfile(mainData);
+			await UserController.updateUserProfile(mainData);
 		}
 		if (newPassword && oldPassword) {
-			await UserController.UpdateUserPassword({
+			await UserController.updateUserPassword({
 				newPassword,
 				oldPassword,
 			});
 		}
 		if (avatar) {
-			await UserController.UpdateUserAvatar(formData.avatar);
+			await UserController.updateUserAvatar(formData.avatar);
 		}
-		await Router.Go(ROUTE.profile);
+		await Router.go(ROUTE.profile);
 	};
 
 	render() {

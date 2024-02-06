@@ -3,7 +3,7 @@ import { IUserSettings } from './UserSettings.interface';
 import template from './template';
 import { FormControl } from '../FormControl/FormControl';
 import './UserSettings.scss';
-import { ParseNumber } from '../../utils/ParseNumber';
+import { parseNumber } from '../../utils/ParseNumber';
 import { UserCard } from '../../components/UserCard/UserCard';
 import { IChatUser } from '../../service/Chats/Chats.interface';
 import ChatsController from '../../controller/ChatsController';
@@ -14,17 +14,6 @@ export class UserSettings extends Block<IUserSettings> {
 	}
 	protected async init() {
 		this.children = {
-			// Users: [
-			// 	...this.props.users,
-			// 	...this.props.users,
-			// ].map(user => new UserCard({
-			// 	name: user.display_name || user.first_name,
-			// 	avatar: user.avatar || '',
-			// 	id: user.id,
-			// 	events: {
-			// 		click: async () => this.deleteUser(user),
-			// 	},
-			// })),
 			Users: this.props.users.map(user => new UserCard({
 				name: user.display_name || user.first_name,
 				avatar: user.avatar || '',
@@ -45,13 +34,13 @@ export class UserSettings extends Block<IUserSettings> {
 
 	protected async deleteUser(user: IChatUser) {
 		const users = <UserCard[]> this.children.Users;
-		const isSuccess = await ChatsController.DeleteChatUsers({
+		const isSuccess = await ChatsController.deleteChatUsers({
 			users: [user.id],
 			chatId: this.props.chatId,
 		});
 		if (isSuccess) {
-			this.children.Users = users.filter(_user => _user.UserID !== user.id);
-			this.DispatchComponentDidUpdate();
+			this.children.Users = users.filter(_user => _user.userID !== user.id);
+			this.dispatchComponentDidUpdate();
 		}
 	}
 
@@ -59,22 +48,22 @@ export class UserSettings extends Block<IUserSettings> {
 		return template;
 	}
 
-	public get NewUsers(): number[] {
+	public get newUsers(): number[] {
 		const input = <FormControl> this.children.Input[0];
 		if (!input) {
 			return [];
 		}
 		const idsString = (<string> input.Value).split(',');
-		const value = idsString.map(id => ParseNumber(id));
+		const value = idsString.map(id => parseNumber(id));
 		return <number[]> value.filter(id => typeof id === 'number');
 	}
 
-	public Clean(): void {
+	public clean(): void {
 		const input = <FormControl> this.children.Input[0];
 		input.Value = '';
 	}
 
-	public UpdateProps(nextProps: Partial<IUserSettings>) {
+	public updateProps(nextProps: Partial<IUserSettings>) {
 		if (nextProps.users) {
 			this.children = {
 				...this.children,
@@ -87,7 +76,7 @@ export class UserSettings extends Block<IUserSettings> {
 					},
 				})),
 			};
-			this.DispatchComponentDidUpdate();
+			this.dispatchComponentDidUpdate();
 		}
 	}
 }

@@ -69,20 +69,20 @@ export class Modal extends Block<IModal> {
 	}
 
 	protected closeEventCallback = (resolve: (value: TModalReturnData) => void, isSuccess = false) => {
-		this.Close();
+		this.close();
 		resolve(this.getResultValue(isSuccess));
 	};
 
 	protected subscribeToButtons(): Promise<TModalReturnData> {
 		return new Promise<TModalReturnData>((resolve) => {
-			(this.children.IconButton[0].Element as HTMLElement)?.addEventListener(
+			(this.children.IconButton[0].element as HTMLElement)?.addEventListener(
 				'click',
 				() => this.closeEventCallback(resolve),
 				{
 					once: true,
 				},
 			);
-			(this.children.Button[0].Element as HTMLElement)?.addEventListener(
+			(this.children.Button[0].element as HTMLElement)?.addEventListener(
 				'click',
 				() => this.closeEventCallback(resolve, true),
 				{
@@ -90,7 +90,7 @@ export class Modal extends Block<IModal> {
 				},
 			);
 			if (this.props.type === 'CONFIRMATION' || this.props.type === 'FORM') {
-				(this.children.Button[1].Element as HTMLElement)?.addEventListener(
+				(this.children.Button[1].element as HTMLElement)?.addEventListener(
 					'click',
 					() => this.closeEventCallback(resolve),
 					{
@@ -113,24 +113,24 @@ export class Modal extends Block<IModal> {
 		}
 	}
 
-	public get Content(): Block[] | null {
+	public get modalContent(): Block[] | null {
 		return this.props.content || null;
 	}
 
-	public async Open(): Promise<TModalReturnData> {
-		if (!this.modalRoot || !this.Element) {
+	public async open(): Promise<TModalReturnData> {
+		if (!this.modalRoot || !this.element) {
 			return null;
 		}
-		this.modalRoot.appendChild(this.Element);
+		this.modalRoot.appendChild(this.element);
 		(<HTMLDialogElement> this.modalRoot).showModal();
 		return this.subscribeToButtons();
 	}
 
-	public Close() {
-		if (!this.modalRoot || !this.Element) {
+	public close() {
+		if (!this.modalRoot || !this.element) {
 			return;
 		}
-		this.modalRoot.removeChild(this.Element);
+		this.modalRoot.removeChild(this.element);
 		(<HTMLDialogElement> this.modalRoot).close();
 	}
 

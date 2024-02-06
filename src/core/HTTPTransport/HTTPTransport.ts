@@ -55,10 +55,10 @@ export class HTTPTransport {
 			} else {
 				xhr.send(JSON.stringify(data));
 			}
-		}).then(data => [data as IResult, null] as IHTTPResult<IResult>).catch(error => [null, error as Error]);
+		}).then(data => [data as IResult, null] as IHTTPResult<IResult>);
 	}
 
-	public Get: THTTPMethod = (url, options) => {
+	public get: THTTPMethod = (url, options) => {
 		return this.request(
 			`${this.endpoint}${url}${queryStringify(options?.data ? options.data : {})}`,
 			{
@@ -68,7 +68,7 @@ export class HTTPTransport {
 		);
 	};
 
-	public Post: THTTPMethod = (url, options) => {
+	public post: THTTPMethod = (url, options) => {
 		return this.request(
 			`${this.endpoint}${url}`,
 			{
@@ -78,7 +78,7 @@ export class HTTPTransport {
 		);
 	};
 
-	public Put: THTTPMethod = (url, options) => {
+	public put: THTTPMethod = (url, options) => {
 		return this.request(
 			`${this.endpoint}${url}`,
 			{
@@ -88,7 +88,7 @@ export class HTTPTransport {
 		);
 	};
 
-	public Delete: THTTPMethod = (url, options) => {
+	public delete: THTTPMethod = (url, options) => {
 		return this.request(
 			`${this.endpoint}${url}`,
 			{

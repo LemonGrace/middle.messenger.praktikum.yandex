@@ -27,7 +27,7 @@ export class ChatsBase extends Page {
 			new FormControl({
 				type: 'text',
 				name: 'title',
-			}).AddValidators([requiredValidator]),
+			}).addValidators([requiredValidator]),
 		],
 	});
 
@@ -35,9 +35,9 @@ export class ChatsBase extends Page {
 
 	protected async init() {
 		await super.init();
-		await ChatsController.GetChats();
-		const chats = store.GetChats();
-		const user = store.GetUser();
+		await ChatsController.getChats();
+		const chats = store.getChats();
+		const user = store.getUser();
 		this.props.withoutCenterLayout = true;
 		this.children = {
 			Header: [
@@ -79,35 +79,35 @@ export class ChatsBase extends Page {
 	}
 
 	protected createChat = async () => {
-		const isSuccess = <boolean> await messageController.ShowModal(this.modal);
+		const isSuccess = <boolean> await messageController.showModal(this.modal);
 		if (!isSuccess) {
 			return;
 		}
-		const title = (this.modal.Content?.[0] as FormControl).Value;
+		const title = (this.modal.modalContent?.[0] as FormControl).Value as string;
 		if (!title) {
 			return;
 		}
-		await ChatsController.CreateChat({
+		await ChatsController.createChat({
 			title,
 		});
 	};
 
 	protected onDialogCardClick = async (chat: IChat) => {
-		const selectedCard = store.GetSelectedChat();
+		const selectedCard = store.getSelectedChat();
 		const isDelete = chat.id === selectedCard?.id;
 		if (!isDelete && selectedCard !== null) {
-			(this.children.Chat[0] as ChatBase).CleanChat();
-			store.Set('selectedChat', null);
+			(this.children.Chat[0] as ChatBase).cleanChat();
+			store.set('selectedChat', null);
 		}
-		store.Set('selectedChat', isDelete ? null : chat);
+		store.set('selectedChat', isDelete ? null : chat);
 		const header = this.children.Header[0];
-		isDelete ? header.Show() : header.Hide();
+		isDelete ? header.show() : header.hide();
 		const chatComponent = this.children.Chat[0] as ChatBase;
 		if (!isDelete) {
-			await chatComponent.UpdateInit();
+			await chatComponent.updateInit();
 		}
-		!isDelete ? chatComponent.Show() : chatComponent.Hide();
-		this.DispatchComponentDidUpdate();
+		!isDelete ? chatComponent.show() : chatComponent.hide();
+		this.dispatchComponentDidUpdate();
 	};
 
 	protected render() {
@@ -115,14 +115,14 @@ export class ChatsBase extends Page {
 	}
 
 	protected updateChatsCount(): void {
-		const chats = store.GetChats();
+		const chats = store.getChats();
 		if (chats.length < this.children.DialogCards?.length) {
 			this.children.DialogCards = this.children.DialogCards.filter(
-				(chat) => chats.find(_chat => _chat.id === (chat as DialogCardBase).CardID),
+				(chat) => chats.find(_chat => _chat.id === (chat as DialogCardBase).cardID),
 			);
 		} else {
 			const unAddedChats: IChat[] = chats.filter(
-				_chat => !this.children.DialogCards.find((card) => (card as DialogCardBase).CardID === _chat.id),
+				_chat => !this.children.DialogCards.find((card) => (card as DialogCardBase).cardID === _chat.id),
 			);
 			this.children.DialogCards = [
 				...unAddedChats.map(chat => {
@@ -138,14 +138,14 @@ export class ChatsBase extends Page {
 		}
 	}
 
-	public UpdateProps(newProps: IPageProps): void {
-		const chats = store.GetChats();
+	public updateProps(newProps: IPageProps): void {
+		const chats = store.getChats();
 		if (chats && this.children.DialogCards?.length) {
 			if (chats.length !== this.children.DialogCards?.length) {
 				this.updateChatsCount();
 			}
 		}
-		super.UpdateProps(newProps);
+		super.updateProps(newProps);
 	}
 }
 

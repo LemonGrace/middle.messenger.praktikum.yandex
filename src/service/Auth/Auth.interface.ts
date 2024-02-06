@@ -1,4 +1,6 @@
-export interface IUser {
+import { IObject } from '../../utils/IObject';
+
+export interface IUser extends IObject {
     id: number;
     first_name: string;
     second_name: string;
@@ -9,7 +11,7 @@ export interface IUser {
     avatar: string;
 }
 
-export interface ISignUpData {
+export interface ISignUpData extends IObject {
     first_name: string;
     second_name: string;
     login: string;
@@ -18,11 +20,11 @@ export interface ISignUpData {
     phone: string;
 }
 
-export interface ISignUpResponse {
+export interface ISignUpResponse extends IObject {
     id: string
 }
 
-export interface ISignInData {
+export interface ISignInData extends IObject {
     login: string;
     password: string;
 }

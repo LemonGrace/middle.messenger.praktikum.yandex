@@ -15,7 +15,7 @@ export class UserInfoBase extends Block {
 	}
 
 	protected getInfoData(): IInformationProps[] {
-		const userData = store.GetUser();
+		const userData = store.getUser();
 		if (!userData) {
 			return [];
 		}

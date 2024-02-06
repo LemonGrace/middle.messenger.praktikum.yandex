@@ -2,7 +2,7 @@ import './Profile.scss';
 import { Page } from '../../core/Page/Page';
 import { Header } from '../../components/Header/Header';
 import template from './template';
-import { ToUpperCase } from '../../utils/ToUpperCase';
+import { toUpperCase } from '../../utils/ToUpperCase';
 import { Avatar } from '../../components/Avatar/Avatar';
 import { Button } from '../../components/Buttons/Button/Button';
 import { UserInfo } from '../../modules/UserInfo/UserInfo';
@@ -28,7 +28,7 @@ class ProfileBase extends Page {
 
 	protected async init() {
 		await super.init();
-		const userData = store.GetUser();
+		const userData = store.getUser();
 		this.children = {
 			Avatar: [
 				new Avatar({
@@ -38,7 +38,7 @@ class ProfileBase extends Page {
 			],
 			Header: [
 				new Header({
-					title: ToUpperCase(userData?.first_name || ''),
+					title: toUpperCase(userData?.first_name || ''),
 				}),
 			],
 			UserInfo: [new (UserInfo)({}, 'UserInfo')],
@@ -55,7 +55,7 @@ class ProfileBase extends Page {
 					text: 'Вернуться к сообщениям',
 					events: {
 						click: async () => {
-							await Router.Go(ROUTE.messenger);
+							await Router.go(ROUTE.messenger);
 						},
 					},
 				}),
@@ -65,7 +65,7 @@ class ProfileBase extends Page {
 					type: BUTTON_TYPE.edit,
 					events: {
 						click: () => {
-							router.Go(ROUTE.settings);
+							router.go(ROUTE.settings);
 						},
 					},
 				}),
@@ -78,13 +78,13 @@ class ProfileBase extends Page {
 	}
 
 	protected async updateUserData() {
-		await AuthController.FetchUser();
+		await AuthController.fetchUser();
 	}
 
 	protected async logOut() {
-		const isSuccess = <boolean> await messageController.ShowModal(this.modal);
+		const isSuccess = <boolean> await messageController.showModal(this.modal);
 		if (isSuccess) {
-			await AuthController.LogOut();
+			await AuthController.logOut();
 		}
 	}
 

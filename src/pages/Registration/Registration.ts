@@ -39,27 +39,27 @@ export class Registration extends Page {
 
 	protected createFields(): FormControl[] {
 		return REGISTRATION_FIELDS.map(field => {
-			return new FormControl(field.inputProps).AddValidators(field.validators);
+			return new FormControl(field.inputProps).addValidators(field.validators);
 		});
 	}
 
 	protected onSubmit = async () => {
 		const form = this.children.Form[0] as Form;
-		form.Validate();
-		if (!form.IsValid) {
+		form.validate();
+		if (!form.isValid) {
 			return;
 		}
-		const formData = form.SubmitForm() as IRegistrationFormData;
+		const formData = form.submitForm() as IRegistrationFormData;
 		if (formData.password !== formData.password_repeat) {
 			const passwordRepeatControl = (this.children.Form[0] as Form)
-				.Controls.find(control => control.FormControlName === 'password_repeat');
-			passwordRepeatControl?.AddError({
+				.controls.find(control => control.formControlName === 'password_repeat');
+			passwordRepeatControl?.addError({
 				different: 'Пароли не совпадают',
 			});
 			return;
 		}
 		delete formData.password_repeat;
-		await AuthController.SignUp(formData as ISignUpData);
+		await AuthController.signUp(formData as ISignUpData);
 	};
 
 	render() {

@@ -2,7 +2,7 @@ import { v4 as makeUUID } from 'uuid';
 import Handlebars from 'handlebars';
 import { EventBus } from '../EventBus/EventBus';
 import { Children, DOMEvents, Props } from './Block.interface';
-import { IsEqual } from '../../utils/IsEqual';
+import { isEqual } from '../../utils/IsEqual';
 
 export class Block<P extends Props = Props> {
 	static EVENTS = {
@@ -34,7 +34,7 @@ export class Block<P extends Props = Props> {
 		this.eventBus = () => eventBus;
 
 		this.registerEvents(eventBus);
-		eventBus.Emit(Block.EVENTS.INIT);
+		eventBus.emit(Block.EVENTS.INIT);
 	}
 
 	private _getPropsAndChildren(propsWithChildren: P): { props: P, children: Children } {
@@ -61,7 +61,7 @@ export class Block<P extends Props = Props> {
 				const oldProps = { ...target };
 				target[prop as keyof P] = value;
 				if (block.eventBus) {
-					block.eventBus().Emit(Block.EVENTS.FLOW_CDU, oldProps, target);
+					block.eventBus().emit(Block.EVENTS.FLOW_CDU, oldProps, target);
 				}
 				return true;
 			},
@@ -69,17 +69,17 @@ export class Block<P extends Props = Props> {
 	}
 
 	private registerEvents(eventBus: EventBus) {
-		eventBus.Listen(Block.EVENTS.INIT, this._init.bind(this));
-		eventBus.Listen(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
-		eventBus.Listen(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
-		eventBus.Listen(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
-		eventBus.Listen(Block.EVENTS.FLOW_CWUM, this._componentWillUnmount.bind(this));
+		eventBus.listen(Block.EVENTS.INIT, this._init.bind(this));
+		eventBus.listen(Block.EVENTS.FLOW_CDM, this._componentDidMount.bind(this));
+		eventBus.listen(Block.EVENTS.FLOW_CDU, this._componentDidUpdate.bind(this));
+		eventBus.listen(Block.EVENTS.FLOW_RENDER, this._render.bind(this));
+		eventBus.listen(Block.EVENTS.FLOW_CWUM, this._componentWillUnmount.bind(this));
 	}
 
 	private async _init() {
 		this._createResources();
 		await this.init();
-		this.eventBus().Emit(Block.EVENTS.FLOW_RENDER);
+		this.eventBus().emit(Block.EVENTS.FLOW_RENDER);
 	}
 
 	private _createResources() {
@@ -107,7 +107,7 @@ export class Block<P extends Props = Props> {
 		this._element = wrapper || newElement;
 
 		this._addEventListeners();
-		this.DispatchComponentDidMount();
+		this.dispatchComponentDidMount();
 	}
 
 	private _componentDidMount() {
@@ -167,7 +167,7 @@ export class Block<P extends Props = Props> {
 				if (!stub) {
 					return;
 				}
-				const _elem = child.GetContent();
+				const _elem = child.getContent();
 				_elem?.append(...Array.from(stub.childNodes));
 				if (_elem) {
 					stub.replaceWith(_elem);
@@ -185,61 +185,57 @@ export class Block<P extends Props = Props> {
 		return '';
 	}
 
-	protected componentDidMount() {
-		// this.eventBus().Emit(Block.EVENTS.FLOW_CDM);
-		// Object.values(this.children).forEach(child => {
-		// 	child.forEach(subChild => subChild.DispatchComponentDidMount());
-		// });
-	}
+	// eslint-disable-next-line @typescript-eslint/no-empty-function
+	protected componentDidMount() {}
 
 	protected componentDidUpdate(oldProps: P, newProps: P) {
-		return !IsEqual(oldProps, newProps);
+		return !isEqual(oldProps, newProps);
 	}
 
 	protected componentWillUnmount() {
 		this._removeEvents();
 	}
 
-	public DispatchComponentDidMount() {
-		this.eventBus().Emit(Block.EVENTS.FLOW_CDM);
+	public dispatchComponentDidMount() {
+		this.eventBus().emit(Block.EVENTS.FLOW_CDM);
 	}
 
-	public DispatchComponentDidUpdate() {
+	public dispatchComponentDidUpdate() {
 		this._render();
 	}
 
-	public UpdateProps(nextProps: Partial<P>): void {
+	public updateProps(nextProps: Partial<P>): void {
 		if (!nextProps) {
 			return;
 		}
 		Object.assign(this.props, nextProps);
 	}
 
-	public DispatchComponentWillUnMount() {
-		this.eventBus().Emit(Block.EVENTS.FLOW_CWUM);
+	public dispatchComponentWillUnMount() {
+		this.eventBus().emit(Block.EVENTS.FLOW_CWUM);
 		Object.values(this.children).forEach(child => {
-			child.forEach(subChild => subChild.DispatchComponentWillUnMount());
+			child.forEach(subChild => subChild.dispatchComponentWillUnMount());
 		});
 	}
 
-	public get Element(): HTMLElement | null {
+	public get element(): HTMLElement | null {
 		return this._element;
 	}
 
-	public GetContent() {
-		return this.Element;
+	public getContent() {
+		return this.element;
 	}
 
-	public Show(): this {
-		const content = this.GetContent();
+	public show(): this {
+		const content = this.getContent();
 		if (content) {
 			content.style.display = 'block';
 		}
 		return this;
 	}
 
-	public Hide(): this {
-		const content = this.GetContent();
+	public hide(): this {
+		const content = this.getContent();
 		if (content) {
 			content.style.display = 'none';
 		}

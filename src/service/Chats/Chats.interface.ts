@@ -1,4 +1,6 @@
-export interface IChat {
+import { IObject } from '../../utils/IObject';
+
+export interface IChat extends IObject {
     id: number,
     title: string,
     avatar: string | null,
@@ -18,27 +20,27 @@ export interface IChat {
     } | null,
 }
 
-export interface IChatCreate {
+export interface IChatCreate extends IObject {
     title: string,
 }
 
-export interface IChatUpdateAvatar {
+export interface IChatUpdateAvatar extends IObject {
     chatId: number,
     avatar: File,
 }
 
-export interface IChatUpdateAvatarResponse {
+export interface IChatUpdateAvatarResponse extends IObject {
     avatar: string,
     created_by: number,
     id: number,
     title: string,
 }
 
-export interface IChatInfo {
+export interface IChatInfo extends IObject {
     chatId: number,
 }
 
-export interface IChatActionUsers {
+export interface IChatActionUsers extends IObject {
     chatId: number,
     users: number[],
 }

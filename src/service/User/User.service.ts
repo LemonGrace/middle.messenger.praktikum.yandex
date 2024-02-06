@@ -8,20 +8,20 @@ export class UserAPI extends API {
 		super('/user');
 	}
 
-	public async UpdateProfile(data: IUserProfileData): Promise<IHTTPResult<IUserUpdateProfileData>> {
-		return this.http.Put<IUserUpdateProfileData>('/profile', {
+	public async updateProfile(data: IUserProfileData): Promise<IHTTPResult<IUserUpdateProfileData>> {
+		return this.http.put<IUserUpdateProfileData>('/profile', {
 			data,
 		});
 	}
 
-	public async UpdatePassword(data: IUserPasswordData): Promise<IHTTPResult<void>> {
-		return this.http.Put('/password', {
+	public async updatePassword(data: IUserPasswordData): Promise<IHTTPResult<void>> {
+		return this.http.put('/password', {
 			data,
 		});
 	}
 
-	public async UpdateAvatar(data: FormData): Promise<IHTTPResult<IUserUpdateProfileData>> {
-		return this.http.Put<IUserUpdateProfileData>('/profile/avatar', {
+	public async updateAvatar(data: FormData): Promise<IHTTPResult<IUserUpdateProfileData>> {
+		return this.http.put<IUserUpdateProfileData>('/profile/avatar', {
 			data,
 		});
 	}

@@ -1,10 +1,10 @@
 import { Props } from '../Block/Block.interface';
 import { Block } from '../Block/Block';
 import store, { IState } from './Store';
-import { IsEqual } from '../../utils/IsEqual';
-import { DeepClone } from '../../utils/DeepClone';
+import { isEqual } from '../../utils/IsEqual';
+import { deepClone } from '../../utils/DeepClone';
 
-type TStore = (Component: typeof Block, mapStateToProps: (state: IState) => Record<string, any>)
+type TStore = (Component: typeof Block, mapStateToProps: (state: IState) => Record<string, unknown>)
 	=> typeof Block;
 
 const withStorePage: TStore = (Component, mapStateToProps) => {
@@ -13,23 +13,23 @@ const withStorePage: TStore = (Component, mapStateToProps) => {
 			super(
 				{
 					...props,
-					...mapStateToProps(store.Get()),
+					...mapStateToProps(store.get()),
 				}, tagName,
 			);
-			let state = mapStateToProps(store.Get());
+			let state = mapStateToProps(store.get());
 			const storeUpdateListener = () => {
-				const newState: Props = mapStateToProps(store.Get()) as Props;
-				if (!IsEqual(state, newState)) {
-					this.UpdateProps({ ...newState });
-					state = DeepClone(newState);
+				const newState: Props = mapStateToProps(store.get()) as Props;
+				if (!isEqual(state, newState)) {
+					this.updateProps({ ...newState });
+					state = deepClone(newState);
 				}
 			};
-			store.AddUpdateListener(storeUpdateListener);
+			store.addUpdateListener(storeUpdateListener);
 		}
 
 		componentWillUnmount() {
 			super.componentWillUnmount();
-			store.Destroy();
+			store.destroy();
 		}
 	} as typeof Block;
 };

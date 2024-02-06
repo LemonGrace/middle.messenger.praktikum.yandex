@@ -7,14 +7,14 @@ export class EventBus<
 > {
 	private readonly listeners: { [key: string]: Listener[] } = {};
 
-	public Listen(event: Event, callback: Listener) {
+	public listen(event: Event, callback: Listener) {
 		if (!this.listeners[event]) {
 			this.listeners[event] = [];
 		}
 		this.listeners[event]?.push(callback);
 	}
 
-	public UnListen(event: Event, callback: Listener) {
+	public unListen(event: Event, callback: Listener) {
 		if (!this.listeners[event]) {
 			throw new Error(`Нет события: ${event}`);
 		}
@@ -24,7 +24,7 @@ export class EventBus<
 		);
 	}
 
-	public Emit(event: Event, ...args: any[]) {
+	public emit(event: Event, ...args: any[]) {
 		if (!this.listeners[event]) {
 			throw new Error(`Нет события: ${event}`);
 		}

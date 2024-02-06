@@ -6,7 +6,7 @@ import { IDialogCardProps } from './DialogCard.interface';
 import store, { IState } from '../../core/Store/Store';
 import withStorePage from '../../core/Store/WithStorePage';
 import { IAvatarProps } from '../Avatar/Avatar.interface';
-import { BeautifyDate } from '../../utils/BeautifyDate';
+import { beautifyDate } from '../../utils/BeautifyDate';
 
 export class DialogCardBase extends Block<IDialogCardProps> {
 	constructor(props: IDialogCardProps) {
@@ -14,11 +14,11 @@ export class DialogCardBase extends Block<IDialogCardProps> {
 	}
 	protected async init() {
 		await super.init();
-		this.props.isSelected = store.GetSelectedChat()?.id === this.CardID;
+		this.props.isSelected = store.getSelectedChat()?.id === this.cardID;
 		if (this.props.last_message) {
 			this.props.last_message = {
 				...this.props.last_message,
-				time: BeautifyDate(this.props.last_message.time),
+				time: beautifyDate(this.props.last_message.time),
 			};
 		}
 		this.children = {
@@ -34,21 +34,21 @@ export class DialogCardBase extends Block<IDialogCardProps> {
 		return template;
 	}
 
-	public get CardID() {
+	public get cardID() {
 		return this.props.id;
 	}
 
-	public UpdateProps() {
-		const chat = store.GetChats()?.find(chat => chat.id === this.CardID);
-		const isSelected = store.GetSelectedChat()?.id === this.CardID;
+	public updateProps() {
+		const chat = store.getChats()?.find(chat => chat.id === this.cardID);
+		const isSelected = store.getSelectedChat()?.id === this.cardID;
 		if (chat) {
 			if (this.props.avatar !== chat.avatar && chat.avatar) {
-				this.children.Avatar[0].UpdateProps({
+				this.children.Avatar[0].updateProps({
 					userImg: chat.avatar,
 				} as IAvatarProps);
 			}
 			if (chat.last_message) {
-				const data = BeautifyDate(chat.last_message.time);
+				const data = beautifyDate(chat.last_message.time);
 				this.props = {
 					...this.props,
 					last_message: {
@@ -57,10 +57,10 @@ export class DialogCardBase extends Block<IDialogCardProps> {
 						content: chat.last_message.content,
 					},
 				};
-				this.DispatchComponentDidUpdate();
+				this.dispatchComponentDidUpdate();
 			}
 		}
-		super.UpdateProps({
+		super.updateProps({
 			isSelected,
 		});
 	}

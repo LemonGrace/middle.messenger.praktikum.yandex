@@ -1,6 +1,8 @@
-export function IsEqual(
-	a: any,
-	b: any,
+import { IObject } from './IObject';
+
+export function isEqual(
+	a: unknown,
+	b: unknown,
 	depth = 5,
 ): boolean {
 	if (a === b) {
@@ -9,18 +11,18 @@ export function IsEqual(
 	if (!isEqualType(a, b)) {
 		return false;
 	}
-	if (Array.isArray(a)) {
+	if (Array.isArray(a) && Array.isArray(b)) {
 		return isEqualArray(a, b, depth - 1);
 	}
-	if (typeof a === 'object') {
-		return isEqualObject(a, b, depth - 1);
+	if (typeof a === 'object' && typeof b === 'object') {
+		return isEqualObject(a as IObject, b as IObject, depth - 1);
 	}
 	return false;
 }
 
 function isEqualObject(
-	obj1: Record<string, any>,
-	obj2: Record<string, any>,
+	obj1: IObject,
+	obj2: IObject,
 	depth = 5,
 ): boolean {
 	if (!obj1 || !obj2) {
@@ -39,7 +41,7 @@ function isEqualObject(
 			}
 			continue;
 		}
-		if (!IsEqual(obj1[key], obj2[key], depth - 1)) {
+		if (!isEqual(obj1[key], obj2[key], depth - 1)) {
 			return false;
 		}
 	}
@@ -49,8 +51,8 @@ function isEqualObject(
 	return true;
 }
 function isEqualArray(
-	arr1: any[],
-	arr2: any[],
+	arr1: unknown[],
+	arr2: unknown[],
 	depth = 5,
 ): boolean {
 	if (arr1.length !== arr2.length) {
@@ -63,7 +65,7 @@ function isEqualArray(
 			}
 			continue;
 		}
-		if (!IsEqual(arr1[index], arr2[index], depth - 1)) {
+		if (!isEqual(arr1[index], arr2[index], depth - 1)) {
 			return false;
 		}
 	}

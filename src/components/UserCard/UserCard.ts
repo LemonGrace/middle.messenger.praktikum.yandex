@@ -31,7 +31,7 @@ export class UserCard extends Block<IUserCard> {
 		return template;
 	}
 
-	public get UserID(): number {
+	public get userID(): number {
 		return this.props.id;
 	}
 }

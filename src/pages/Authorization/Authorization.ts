@@ -39,18 +39,18 @@ export class Authorization extends Page {
 
 	protected createFields(): FormControl[] {
 		return LOGIN_FIELDS.map(field => {
-			return new FormControl(field.inputProps).AddValidators(field.validators);
+			return new FormControl(field.inputProps).addValidators(field.validators);
 		});
 	}
 
 	protected onSubmit = async () => {
 		const form = this.children.Form[0] as Form;
-		form.Validate();
-		if (!form.IsValid) {
+		form.validate();
+		if (!form.isValid) {
 			return;
 		}
-		const formData = form.SubmitForm() as ISignInData;
-		await AuthController.SignIn(formData);
+		const formData = form.submitForm() as ISignInData;
+		await AuthController.signIn(formData);
 	};
 
 	render() {
