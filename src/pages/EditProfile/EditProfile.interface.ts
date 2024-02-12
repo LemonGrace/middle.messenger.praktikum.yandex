@@ -1,4 +1,3 @@
-import { Props } from '../../templateUtils/Block.interface';
 import { IInputProps } from '../../components/FormContolElements/Input/Input.interface';
 import {
 	emailValidator,
@@ -8,15 +7,21 @@ import {
 	phoneValidator,
 	Validator,
 } from '../../utils/validator';
-
-export interface IEditProfileProps extends Props {
-	userImg: string,
-}
+import { IUserPasswordData, IUserProfileData } from '../../service/User/User.interface';
+import { IUser } from '../../service/Auth/Auth.interface';
 
 export const EDIT_PROFILE_FIELDS: Array<{
 	inputProps: IInputProps,
 	validators: Validator | Validator[],
 }> = [
+	{
+		inputProps: {
+			type: 'file',
+			label: 'Сменить аватар',
+			name: 'avatar',
+		},
+		validators: [],
+	},
 	{
 		inputProps: {
 			label: 'Почта',
@@ -84,3 +89,19 @@ export const EDIT_PROFILE_FIELDS: Array<{
 		validators: passwordValidator,
 	},
 ];
+
+export const FIELDS_USER_CORRELATION: Record<string, (user: IUser) => string> = {
+	email: (user) => user.email,
+	login: (user) => user.login,
+	first_name: (user) => user.first_name,
+	second_name: (user) => user.second_name,
+	display_name: (user) => user.display_name,
+	phone: (user) => user.phone,
+	avatar: () => '',
+	oldPassword: () => '',
+	newPassword: () => '',
+};
+
+export type IEditProfileFormData = IUserProfileData & IUserPasswordData & {
+	avatar: File,
+};

@@ -1,8 +1,8 @@
 import '../Button.scss';
-import { Block } from '../../../templateUtils/Block';
+import { Block } from '../../../core/Block/Block';
 import template from './template';
 import { IButtonProps } from './Button.interface';
-import { toUpperCase } from '../../../utils/toUpperCase';
+import { toUpperCase } from '../../../utils/ToUpperCase';
 
 export class Button extends Block<IButtonProps> {
 	constructor(props: IButtonProps) {
@@ -10,8 +10,8 @@ export class Button extends Block<IButtonProps> {
 		super(props, 'Button');
 	}
 
-	protected init() {
-		super.init();
+	protected async init() {
+		await super.init();
 	}
 
 	render() {

@@ -1,7 +1,5 @@
-import { Props } from '../../templateUtils/Block.interface';
-import { IChatResponse } from '../../pages/Chats/Chats.interface';
+import { Props } from '../../core/Block/Block.interface';
 
-export interface IChatProps extends Props, IChatResponse {
-	selfUserName: string,
-	selfUserImage: string,
+export interface IChatProps extends Props {
+	chatId: number,
 }

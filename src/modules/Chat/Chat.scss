@@ -5,6 +5,10 @@
 	height: 100%;
 	width: 100%;
 
+	&-hidden {
+		display: none;
+	}
+
 	&__menu {
 		position: absolute;
 		border-radius: 0 0 16px 16px;
@@ -17,7 +21,18 @@
 		align-items: center;
 		justify-content: space-between;
 		gap: 24px;
-		width: 420px;
+		width: 520px;
+
+		& > .avatar-name-button {
+			width: 310px;
+		}
+
+		&-buttons {
+			display: flex;
+			align-items: center;
+			justify-content: space-between;
+			gap: 12px;
+		}
 	}
 
 	&__list {

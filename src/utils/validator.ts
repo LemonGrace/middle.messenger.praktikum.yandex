@@ -1,6 +1,19 @@
 export type Validator = (value: any) => null | Record<string, string>;
 
+export const requiredValidator: Validator = (value: any): null | Record<string, string> => {
+	if (!value) {
+		return {
+			requiredError: 'Поле не должно быть пустым',
+		};
+	}
+	return null;
+};
+
+
 export const loginValidator: Validator = (value: string): null | Record<string, string> => {
+	if (!value) {
+		return null;
+	}
 	if (value.length < 3) {
 		return {
 			lengthError: 'Длина логина должна быть не менее 3 символов',
@@ -25,6 +38,9 @@ export const loginValidator: Validator = (value: string): null | Record<string, 
 };
 
 export const passwordValidator: Validator = (value: string): null | Record<string, string> => {
+	if (!value) {
+		return null;
+	}
 	if (value.length < 8) {
 		return {
 			lengthError: 'Длина пароля должна быть не менее 8 символов',
@@ -49,6 +65,9 @@ export const passwordValidator: Validator = (value: string): null | Record<strin
 };
 
 export const phoneValidator: Validator = (value: string): null | Record<string, string> => {
+	if (!value) {
+		return null;
+	}
 	if (!/^\+?\d{10,15}$/.test(value)) {
 		return {
 			phoneError: 'Проверьте введенный номер телефона',
@@ -58,6 +77,9 @@ export const phoneValidator: Validator = (value: string): null | Record<string, 
 };
 
 export const nameValidator: Validator = (value: string): null | Record<string, string> => {
+	if (!value) {
+		return null;
+	}
 	if (!/^[A-ZА-ЯЁ]/.test(value)) {
 		return {
 			uppercaseError: 'В начале отсутствует заглавная буква',
@@ -72,20 +94,14 @@ export const nameValidator: Validator = (value: string): null | Record<string, s
 };
 
 export const emailValidator: Validator = (value: string): null | Record<string, string> => {
+	if (!value) {
+		return null;
+	}
 	// eslint-disable-next-line max-len
 	const pattern = /^[!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]+((\.)?[!#$%&'*+/=?^_`{|}~a-zA-Z0-9-]+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/;
 	if (!pattern.test(value)) {
 		return {
 			emailError: 'Указан некорректный адрес электронной почты',
-		};
-	}
-	return null;
-};
-
-export const messageValidator: Validator = (value: string): null | Record<string, string> => {
-	if (!value) {
-		return {
-			requiredError: 'Поле не должно быть пустым',
 		};
 	}
 	return null;

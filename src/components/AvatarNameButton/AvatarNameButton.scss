@@ -9,10 +9,13 @@
 	flex-shrink: 1;
 	gap: 8px;
 
-	// TODO добавить вариант с длинным именем
 	&__name {
 		text-shadow: 4px 4px 6px $base-red-purple;
+		text-transform: capitalize;
 
 		@include link;
+
+		overflow: hidden;
+		text-overflow: ellipsis;
 	}
 }

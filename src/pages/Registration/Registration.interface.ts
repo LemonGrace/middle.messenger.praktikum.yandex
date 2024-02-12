@@ -4,9 +4,10 @@ import {
 	loginValidator,
 	nameValidator,
 	passwordValidator,
-	phoneValidator,
+	phoneValidator, requiredValidator,
 	Validator,
 } from '../../utils/validator';
+import { ISignUpData } from '../../service/Auth/Auth.interface';
 
 export const REGISTRATION_FIELDS: Array<{
 	inputProps: IInputProps,
@@ -18,7 +19,7 @@ export const REGISTRATION_FIELDS: Array<{
 			type: 'text',
 			name: 'first_name',
 		},
-		validators: nameValidator,
+		validators: [requiredValidator, nameValidator],
 	},
 	{
 		inputProps: {
@@ -26,7 +27,7 @@ export const REGISTRATION_FIELDS: Array<{
 			type: 'text',
 			name: 'second_name',
 		},
-		validators: nameValidator,
+		validators: [requiredValidator, nameValidator],
 	},
 	{
 		inputProps: {
@@ -34,7 +35,7 @@ export const REGISTRATION_FIELDS: Array<{
 			type: 'phone',
 			name: 'phone',
 		},
-		validators: phoneValidator,
+		validators: [requiredValidator, phoneValidator],
 	},
 	{
 		inputProps: {
@@ -42,7 +43,7 @@ export const REGISTRATION_FIELDS: Array<{
 			type: 'email',
 			name: 'email',
 		},
-		validators: emailValidator,
+		validators: [requiredValidator, emailValidator],
 	},
 	{
 		inputProps: {
@@ -50,9 +51,8 @@ export const REGISTRATION_FIELDS: Array<{
 			type: 'text',
 			name: 'login',
 		},
-		validators: loginValidator,
+		validators: [requiredValidator, loginValidator],
 	},
-	// TODO валидация на совпадение
 	{
 		inputProps: {
 			label: 'Пароль',
@@ -60,7 +60,7 @@ export const REGISTRATION_FIELDS: Array<{
 			name: 'password',
 			placeholder: 'Введите пароль',
 		},
-		validators: passwordValidator,
+		validators: [requiredValidator, passwordValidator],
 	},
 	{
 		inputProps: {
@@ -69,6 +69,8 @@ export const REGISTRATION_FIELDS: Array<{
 			name: 'password_repeat',
 			placeholder: 'Повторите пароль',
 		},
-		validators: passwordValidator,
+		validators: [requiredValidator, passwordValidator],
 	},
 ];
+
+export type IRegistrationFormData = ISignUpData & { password_repeat?: string };

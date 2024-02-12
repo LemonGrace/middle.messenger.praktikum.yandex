@@ -4,22 +4,22 @@ export default `
         {{{ Avatar }}}
 		<div class='dialog-card__user'>
 			<div class='dialog-card__user__name'>
-				{{ username }}
+				{{ title }}
 			</div>
             <span class='dialog-card__text dialog-card__user__message'>
-                {{ lastMessage }}
+                {{ last_message.content }}
             </span>
 		</div>
 		<div class='dialog-card__info'>
-            {{#if unreadMessages }}
+            {{#if unread_count }}
                 <div class='dialog-card__info__count'>
 					<span class='dialog-card__info__text'>
 					</span>
-					{{ unreadMessages }}
+					{{ unread_count }}
 				</div>
             {{/if}}
 			<span class='dialog-card__info__text'>
-				{{ time }}
+				{{ last_message.time }}
 			</span>
 		</div>
     </div>

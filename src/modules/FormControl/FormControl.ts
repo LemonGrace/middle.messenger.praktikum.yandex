@@ -1,11 +1,11 @@
 import './FormControl.scss';
 import template from './template';
 
-import { Block } from '../../templateUtils/Block';
+import { Block } from '../../core/Block/Block';
 import { Input } from '../../components/FormContolElements/Input/Input';
 import { Validator } from '../../utils/validator';
-import { MaybeArray, NeedArray } from '../../utils/NeedArray';
-import { Props } from '../../templateUtils/Block.interface';
+import { MaybeArray, needArray } from '../../utils/NeedArray';
+import { Props } from '../../core/Block/Block.interface';
 import { IInputProps } from '../../components/FormContolElements/Input/Input.interface';
 import { ErrorLabel } from '../../components/FormContolElements/ErrorLabel/ErrorLabel';
 
@@ -18,14 +18,14 @@ export class FormControl extends Block<IInputProps> {
 		super(props, 'FormControl');
 	}
 
-	protected init() {
-		super.init();
+	protected async init() {
+		await super.init();
 		this.children = {
 			Input: [
 				new Input({
 					...this.props,
 					events: {
-						blur: () => this.Validate(),
+						blur: () => this.validate(),
 						change: () => {
 							this.isTouched = true;
 						},
@@ -40,18 +40,28 @@ export class FormControl extends Block<IInputProps> {
 		};
 	}
 
-	render() {
+	protected render() {
 		return template;
 	}
 
-	public get IsValid(): boolean {
+	protected updateError(): void {
+		this.children.ErrorLabel[0].updateProps({
+			errorText: !this.errors.length ? '' : Object.values(this.errors[0])[0],
+		} as Props);
+	}
+
+	protected setValue(value: unknown): void {
+		(this.children.Input[0].element as HTMLInputElement).value = value as string;
+	}
+
+	public get isValid(): boolean {
 		if (!this.isTouched) {
 			return false;
 		}
 		return !this.errors.length;
 	}
 
-	public Validate() {
+	public validate() {
 		const value = this.Value;
 		const errorList = [];
 		for (const validator of this.validators) {
@@ -62,29 +72,44 @@ export class FormControl extends Block<IInputProps> {
 		}
 		this.errors = errorList;
 
-		this.children.Input[0].UpdateProps({
+		this.children.Input[0].updateProps({
 			...this.props,
 			isError: !!this.errors.length,
 			value,
 		} as Props);
-		this.children.ErrorLabel[0].UpdateProps({
-			errorText: !this.errors.length ? '' : Object.values(this.errors[0])[0],
-		} as Props);
+		this.updateError();
 	}
 
-	public AddValidators(validators: MaybeArray<Validator>): this {
+	public addValidators(validators: MaybeArray<Validator>): this {
 		this.validators = [
 			...this.validators,
-			...NeedArray(validators),
+			...needArray(validators),
 		];
 		return this;
 	}
 
-	public get Value(): any {
-		return (this.children.Input[0].Element as HTMLInputElement).value;
+	public addError(error: Record<string, string>): this {
+		this.errors = [
+			...this.errors,
+			error,
+		];
+		this.children.Input[0].updateProps({
+			...this.props,
+			isError: !!this.errors.length,
+		} as Props);
+		this.updateError();
+		return this;
 	}
 
-	public get FormControlName(): string {
+	public get Value(): unknown {
+		return (this.children.Input[0].element as HTMLInputElement).value;
+	}
+
+	public set Value(value: unknown) {
+		(this.children.Input[0].element as HTMLInputElement).value = value as string;
+	}
+
+	public get formControlName(): string {
 		return this.props.name || '';
 	}
 }

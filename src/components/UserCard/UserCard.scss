@@ -1,0 +1,32 @@
+@import 'src/styles/colors';
+@import 'src/styles/fonts';
+
+.user-card {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    border-radius: 12px;
+    border: 2px solid $base-red-purple;
+    background: $base-classic-rose;
+    box-shadow: -2px -2px 4px 0 rgb(219 0 110 / 58%), 2px 2px 4px 0 rgb(219 0 110 / 58%);
+
+    &-avatar {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    &-title {
+        flex-grow: 1;
+        flex-shrink: 1;
+        color: $base-dark-scarlet;
+
+        @include fs24-lh24-medium;
+
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+}

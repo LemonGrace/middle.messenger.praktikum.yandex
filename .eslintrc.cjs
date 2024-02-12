@@ -12,6 +12,7 @@ module.exports = {
 	"plugins": ["@typescript-eslint"],
 	'rules': {
 		'no-restricted-syntax': 'off',
+		'no-unused-expressions': 'off',
 		'no-console': ['error', { allow: ['warn', 'error'] }],
 		'import/no-unresolved': 'off',
 		'eol-last': ['error', 'always'],
@@ -31,6 +32,7 @@ module.exports = {
 		'function-call-argument-newline': ['error', 'consistent'],
 		'function-paren-newline': ['error', 'consistent'],
 		'array-element-newline': ['error', 'consistent'],
+		'camelcase': ["error", { "properties": "never", ignoreDestructuring: true }],
 		'array-bracket-newline': ['error', { 'multiline': true }],
 		'array-bracket-spacing': ['error', 'never'],
 		'object-curly-spacing': ['error', 'always'],

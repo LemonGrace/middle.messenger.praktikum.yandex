@@ -19,8 +19,11 @@
 	cursor: pointer;
 	text-transform: uppercase;
 
-	// TODO анимация
-	// TODO hover
+	&:hover {
+		background-color: $base-lavender-pink;
+		box-shadow: 2px 4px 4px 0 rgb(208 31 75 / 100%);
+	}
+
 	&:active {
 		opacity: 0.5;
 	}
@@ -55,12 +58,24 @@
 		@include icon-color(invert(85%) sepia(29%) saturate(350%) hue-rotate(356deg) brightness(109%) contrast(103%), $base-pale-yellow);
 	}
 
+	&[data-type="close"] {
+		border: none;
+		padding: 0;
+		height: 24px;
+		width: 24px;
+
+		@include icon-color(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%), $base-red-purple);
+	}
+
+	&[data-type="delete"] {
+		@include icon-color(invert(85%) sepia(29%) saturate(350%) hue-rotate(356deg) brightness(109%) contrast(103%), $base-pale-yellow);
+	}
+
 	&[data-type="chat_settings"] {
 		@include icon-color(invert(85%) sepia(29%) saturate(350%) hue-rotate(356deg) brightness(109%) contrast(103%), $base-pale-yellow);
 	}
 
 	&[data-type="new_chat"] {
-		// TODO поискать иконку
 		@include icon-color(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%), $base-red-purple);
 	}
 
@@ -69,13 +84,11 @@
 	}
 
 	&[data-type="send"] {
-		// TODO поискать иконку
 		@include icon-color(invert(14%) sepia(98%) saturate(6950%) hue-rotate(322deg) brightness(85%) contrast(104%), $base-red-purple);
 
 		background-color: $base-classic-rose;
 	}
 
-	// TODO анимация
 	&:active {
 		opacity: 0.5;
 	}
