@@ -17,4 +17,11 @@ export class Button extends Block<IButtonProps> {
 	render() {
 		return template;
 	}
+
+	public updateProps(newProps: Partial<IButtonProps>): void {
+		super.updateProps(newProps);
+		if (this.element) {
+			(this.element as HTMLButtonElement).disabled = newProps.isLoading || this.props.isLoading || false;
+		}
+	}
 }

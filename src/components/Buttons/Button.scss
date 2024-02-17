@@ -27,6 +27,18 @@
 	&:active {
 		opacity: 0.5;
 	}
+
+	&:disabled {
+		border: none;
+		cursor: not-allowed;
+		opacity: 0.2;
+		box-shadow: none;
+
+		&:hover {
+			background: $base-cameo-pink;
+			box-shadow: none;
+		}
+	}
 }
 
 @mixin icon-color($filterColor, $borderColor) {

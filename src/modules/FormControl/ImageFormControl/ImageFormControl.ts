@@ -1,6 +1,7 @@
 import { FormControl } from '../FormControl';
 import { IInputProps } from '../../../components/FormContolElements/Input/Input.interface';
 import ModalController from '../../../controller/ModalController';
+import { Props } from '../../../core/Block/Block.interface';
 const ACCEPT_FILE = ['image/png', 'image/jpg', 'image/jpeg', 'image/gif'];
 
 export class ImageFormControl extends FormControl {
@@ -52,5 +53,26 @@ export class ImageFormControl extends FormControl {
 
 	public set Value(value: File | null) {
 		this.value = value;
+		this.dispatchComponentDidMount();
+	}
+
+	public validate() {
+		const value = this.Value;
+		const errorList = [];
+		for (const validator of this.validators) {
+			const error = validator(value);
+			if (error) {
+				errorList.push(error);
+			}
+		}
+		this.errors = errorList;
+		if (this.errors.length) {
+			this.children.Input[0].updateProps({
+				...this.props,
+				value,
+				isError: !!this.errors.length,
+			} as Props);
+			this.updateError();
+		}
 	}
 }
