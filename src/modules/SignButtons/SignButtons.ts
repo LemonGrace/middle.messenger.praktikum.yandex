@@ -17,7 +17,16 @@ export class SignButtons extends Block<ISignButtonsProps> {
 				new Button({
 					text: this.props.submitButtonText,
 					events: {
-						click: this.props.submitAction,
+						click: async () => {
+							const button = this.children.Button[0];
+							button.updateProps({
+								isLoading: true,
+							});
+							await this.props.submitAction();
+							button.updateProps({
+								isLoading: false,
+							});
+						},
 					},
 				}),
 			],

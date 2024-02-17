@@ -82,9 +82,16 @@ class ProfileBase extends Page {
 	}
 
 	protected async logOut() {
+		const button = this.children.ButtonLogout[0];
+		button.updateProps({
+			isLoading: true,
+		});
 		const isSuccess = <boolean> await messageController.showModal(this.modal);
 		if (isSuccess) {
 			await AuthController.logOut();
+			button.updateProps({
+				isLoading: false,
+			});
 		}
 	}
 
@@ -93,10 +100,8 @@ class ProfileBase extends Page {
 	}
 }
 
-// TODO loading
 const mapStateToProps = (state: IState) => ({
 	user: state.user,
-	// loading: state.loading,
 });
 
 export const Profile = withStorePage(ProfileBase as typeof Block, mapStateToProps);

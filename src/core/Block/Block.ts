@@ -241,4 +241,8 @@ export class Block<P extends Props = Props> {
 		}
 		return this;
 	}
+
+	public destroy(): void {
+		this._componentWillUnmount();
+	}
 }

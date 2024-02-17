@@ -12,6 +12,8 @@ class Router {
 	private _currentRoute: Route | null = null;
 	private readonly _rootQuery: string;
 
+	protected isTest = false;
+
 	constructor(rootQuery: string) {
 		if (!Router.__instance) {
 			this._rootQuery = rootQuery;
@@ -35,20 +37,24 @@ class Router {
 		route.render();
 	}
 
-	protected getRoute(pathname: string): Route | null {
-		const route = this.routes.find((route) => route.match(pathname));
-		if (!route) {
-			return this.routes.find((route) => route.match('/404')) || null;
-		}
-		return route;
-	}
-
 	protected async isUserActive(): Promise<boolean> {
 		return AuthController.isUserActive();
 	}
 
 	protected isRouteProtected(pathname: ROUTE): boolean {
 		return !Router.__notProtectedRoute.find(route => route === pathname);
+	}
+
+	public getRoute(pathname: string): Route | null {
+		const route = this.routes.find((route) => route.match(pathname));
+		if (!route) {
+			const errorPage = this.routes.find((route) => route.match('/404')) || null;
+			if (errorPage) {
+				this.history.pushState({}, '', errorPage.path);
+			}
+			return errorPage;
+		}
+		return route;
 	}
 
 	public use(pathname: string, block: new (props: Props, tagName?: string) => Block, props?: Props): this {
@@ -72,19 +78,30 @@ class Router {
 		if (isUserActive && [ROUTE.sign_in, ROUTE.sign_up].includes(pathname)) {
 			return this.go(ROUTE.messenger);
 		}
-		if (this.isRouteProtected(pathname) && !isUserActive) {
+		if (this.isRouteProtected(pathname) && !isUserActive && !this.isTest) {
 			return this.go(ROUTE.sign_in);
 		}
 		this.history.pushState({}, '', pathname);
 		return this.onRoute(pathname);
 	}
 
-	public back(): void {
-		this.history.back();
+	public async back(): Promise<void> {
+		await this.history.back();
+		if (this.isTest) {
+			await new Promise(resolve => { setTimeout(resolve, 500); });
+		}
 	}
 
 	public forward(): void {
 		this.history.forward();
+	}
+
+	public get route(): Route | null {
+		return this._currentRoute;
+	}
+
+	public set setIsTest(isTest: boolean) {
+		this.isTest = isTest;
 	}
 }
 

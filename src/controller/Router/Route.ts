@@ -45,4 +45,16 @@ export class Route {
 			this._block = null;
 		}
 	}
+
+	public get path(): string {
+		return this._pathname;
+	}
+
+	public get blockClass(): new (props: Props) => Block {
+		return this._blockClass;
+	}
+
+	public get block(): Block | null {
+		return this._block;
+	}
 }

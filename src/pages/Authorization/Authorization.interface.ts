@@ -23,4 +23,3 @@ export const LOGIN_FIELDS: Array<{
 		validators: [requiredValidator, passwordValidator],
 	},
 ];
-// TODO вернуть валидаторы

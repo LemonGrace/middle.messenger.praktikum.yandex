@@ -56,7 +56,7 @@ module.exports = {
 		],
 		'linebreak-style': [
 			'error',
-			'windows',
+			'unix',
 		],
 		'quotes': [
 			'error',
@@ -133,4 +133,14 @@ module.exports = {
 			},
 		],
 	},
+	"overrides": [
+		{
+			"files": [
+				"**/*.spec.ts",
+			],
+			"env": {
+				"jest": true
+			}
+		}
+	]
 };

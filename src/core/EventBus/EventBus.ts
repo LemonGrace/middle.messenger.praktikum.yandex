@@ -33,4 +33,8 @@ export class EventBus<
 			listener(...args);
 		});
 	}
+
+	public get publicListeners(): { [key: string]: Listener[] } {
+		return this.listeners;
+	}
 }
