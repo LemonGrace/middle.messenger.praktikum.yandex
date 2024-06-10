@@ -9,15 +9,17 @@ export interface IState {
 	selectedChat: IChatActive | null;
 }
 
+export const EMPTY_STATE = {
+	user: null,
+	chats: [],
+	selectedChat: null,
+};
+
 class Store extends EventBus {
 	static EVENTS = {
 		UPDATE: 'UPDATE',
 	};
-	private state: IState = {
-		user: null,
-		chats: [],
-		selectedChat: null,
-	};
+	private state: IState = EMPTY_STATE;
 	private listener: Handler | null = null;
 
 	constructor() {
@@ -53,17 +55,18 @@ class Store extends EventBus {
 	}
 
 	public clean(): void {
-		this.state = {
-			user: null,
-			chats: [],
-			selectedChat: null,
-		};
+		this.state = EMPTY_STATE;
 	}
 
 	public destroy(): void {
 		if (this.listener) {
 			this.unListen(Store.EVENTS.UPDATE, this.listener);
+			this.listener = null;
 		}
+	}
+
+	public get getListener(): Handler | null {
+		return this.listener;
 	}
 }
 

@@ -18,7 +18,7 @@ export class HTTPTransport {
 		this.endpoint = `${HTTPTransport.API_URL}${endpoint}`;
 	}
 
-	protected request<IResult>(
+	public request<IResult>(
 		url: string,
 		options: IRequestOptions = { method: METHOD.GET },
 	): Promise<IHTTPResult<IResult>> {

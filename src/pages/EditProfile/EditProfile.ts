@@ -84,6 +84,10 @@ export class EditProfileBase extends Page {
 	}
 
 	protected onSubmit = async () => {
+		const button = this.children.Button[0];
+		button.updateProps({
+			isLoading: true,
+		});
 		const form = this.children.Form[0] as Form;
 		const userData = store.getUser();
 		form.validate();
@@ -123,6 +127,9 @@ export class EditProfileBase extends Page {
 		if (avatar) {
 			await UserController.updateUserAvatar(formData.avatar);
 		}
+		button.updateProps({
+			isLoading: false,
+		});
 		await Router.go(ROUTE.profile);
 	};
 
@@ -131,10 +138,8 @@ export class EditProfileBase extends Page {
 	}
 }
 
-// TODO loading
 const mapStateToProps = (state: IState) => ({
 	user: state.user,
-	// loading: state.loading,
 });
 
 export const EditProfile = withStorePage(EditProfileBase as typeof Block, mapStateToProps);

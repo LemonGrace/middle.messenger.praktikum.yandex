@@ -1,6 +1,6 @@
-import store from '../core/Store/Store';
-import messageController from '../controller/ModalController';
-import ChatsController from '../controller/ChatsController';
+import store from '../../core/Store/Store';
+import messageController from '../../controller/ModalController';
+import ChatsController from '../../controller/ChatsController';
 
 const URL = 'wss://ya-praktikum.tech/ws/chats';
 
@@ -8,12 +8,17 @@ export default class Socket {
 	private readonly _token: string;
 	private readonly _chatId: number;
 	private readonly _userId: number;
+	/** Для игнорирования ошибки закрытия по невалидному токену на тестах */
+	private isTest = false;
 	protected socket: WebSocket;
 
-	constructor({ chatID, token }: ISocket) {
+	constructor({ chatID, token, isTest }: ISocket) {
 		this._chatId = chatID;
 		this._token = token;
 		this._userId = store.getUser()?.id || 0;
+		if (isTest) {
+			this.isTest = isTest;
+		}
 		this.socket = this.createConnection();
 
 		this.start();
@@ -39,7 +44,9 @@ export default class Socket {
 				const messages = JSON.parse(event.data);
 				await ChatsController.updateMessages(messages);
 			} catch (error) {
-				await messageController.showError(new Error('Повторите попытку позже'));
+				if (!this.isTest) {
+					await messageController.showError(new Error('Повторите попытку позже'));
+				}
 			}
 		});
 
@@ -70,10 +77,15 @@ export default class Socket {
 	public close(): void {
 		return this.socket.close();
 	}
+
+	public get Socket(): WebSocket {
+		return this.socket;
+	}
 }
 
 
 export interface ISocket {
     chatID: number,
     token: string,
+	isTest?: boolean,
 }

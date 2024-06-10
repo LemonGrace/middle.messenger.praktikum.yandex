@@ -17,7 +17,7 @@ import { IAvatarNameButtonProps } from '../../components/AvatarNameButton/Avatar
 import withStorePage from '../../core/Store/WithStorePage';
 import { IChat, IChatMessage, IChatUser } from '../../service/Chats/Chats.interface';
 import { UserSettings } from '../UsersSettings/UserSettings';
-import Socket from '../../service/WebSocket';
+import Socket from '../../service/WebSocket/WebSocket';
 import { Message } from '../../components/Message/Message';
 import { beautifyDate } from '../../utils/BeautifyDate';
 
